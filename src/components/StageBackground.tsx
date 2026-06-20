@@ -53,13 +53,13 @@ export default function StageBackground({
       {/* Faint skyline silhouette anchoring the real-estate theme */}
       <Skyline />
 
-      {/* Vignette for stage depth */}
+      {/* Soft vignette — kept light so edges don't read as empty margins on laptop */}
       <div
         style={{
           position: "absolute",
           inset: 0,
           background:
-            "radial-gradient(120% 110% at 50% 45%, transparent 55%, rgba(2,9,20,0.65) 100%)",
+            "radial-gradient(130% 120% at 50% 48%, transparent 72%, rgba(2,9,20,0.28) 100%)",
           pointerEvents: "none",
         }}
       />

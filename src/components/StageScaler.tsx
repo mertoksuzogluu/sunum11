@@ -1,26 +1,35 @@
 import { useLayoutEffect, useState, type ReactNode } from "react";
 import { STAGE } from "../theme";
 
+/** Viewport size excluding scrollbars (avoids horizontal gap on Windows). */
+function viewportSize() {
+  return {
+    w: document.documentElement.clientWidth,
+    h: document.documentElement.clientHeight,
+  };
+}
+
 /**
- * Renders children inside a fixed 1920×1080 (16:9) logical stage and scales it
- * to **cover** the viewport — no letterbox bars on the sides or top/bottom.
- * A small edge crop on non-16:9 screens is normal for stage/keynote use.
+ * Fixed 1920×1080 stage scaled to **cover** the viewport.
+ * Uses translate + scale centering (more reliable than grid + transformOrigin).
  */
 export default function StageScaler({ children }: { children: ReactNode }) {
   const [scale, setScale] = useState(1);
 
   useLayoutEffect(() => {
     const update = () => {
-      const w = window.visualViewport?.width ?? window.innerWidth;
-      const h = window.visualViewport?.height ?? window.innerHeight;
-      const s = Math.max(w / STAGE.width, h / STAGE.height);
-      setScale(s);
+      const { w, h } = viewportSize();
+      setScale(Math.max(w / STAGE.width, h / STAGE.height));
     };
     update();
     window.addEventListener("resize", update);
+    window.addEventListener("orientationchange", update);
+    document.addEventListener("fullscreenchange", update);
     window.visualViewport?.addEventListener("resize", update);
     return () => {
       window.removeEventListener("resize", update);
+      window.removeEventListener("orientationchange", update);
+      document.removeEventListener("fullscreenchange", update);
       window.visualViewport?.removeEventListener("resize", update);
     };
   }, []);
@@ -30,22 +39,20 @@ export default function StageScaler({ children }: { children: ReactNode }) {
       style={{
         position: "fixed",
         inset: 0,
-        width: "100vw",
-        height: "100dvh",
-        display: "grid",
-        placeItems: "center",
-        background: "#03101f",
         overflow: "hidden",
+        background: "#03101f",
       }}
     >
       <div
         style={{
+          position: "absolute",
+          left: "50%",
+          top: "50%",
           width: STAGE.width,
           height: STAGE.height,
-          transform: `scale(${scale})`,
+          transform: `translate(-50%, -50%) scale(${scale})`,
           transformOrigin: "center center",
-          position: "relative",
-          flexShrink: 0,
+          willChange: "transform",
         }}
       >
         {children}
