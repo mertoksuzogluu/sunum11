@@ -1,0 +1,269 @@
+:root {
+  --navy-900: #04122b;
+  --navy-800: #071a3a;
+  --navy-700: #09295c;
+  --blue: #1667d9;
+  --blue-bright: #1e73e8;
+  --blue-soft: #3e8bff;
+  --green: #23d18b;
+  --green-neon: #7cffb2;
+  --ice: #f5f8ff;
+  --gray: #aab7c8;
+  --amber: #b47a3c;
+  --amber-deep: #9a6a3a;
+
+  --font-display: "Sora", "Space Grotesk", system-ui, sans-serif;
+  --font-heading: "Space Grotesk", "Sora", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  background: #03101f;
+  color: var(--ice);
+  font-family: var(--font-body);
+  overflow: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+::selection {
+  background: rgba(124, 255, 178, 0.3);
+  color: #fff;
+}
+
+/* Hide scrollbars inside the deck but keep the speaker-notes panel scrollable */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}
+
+.thin-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+.thin-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(170, 183, 200, 0.3);
+  border-radius: 8px;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* Opening orbit animations (reliable CSS transforms on SVG groups) */
+@keyframes gv-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes gv-spin-rev {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+@keyframes gv-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.25;
+  }
+  50% {
+    transform: scale(1.15);
+    opacity: 0.5;
+  }
+}
+@keyframes gv-shimmer {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+/* -------------------------------------------------------------------------
+ * Robust CSS entrance animations.
+ *
+ * These are driven by the document timeline (not requestAnimationFrame), so —
+ * unlike JS/Framer animations — they keep progressing and always settle on
+ * their final visible state even when the tab is throttled / occluded / unfocused.
+ * That guarantees the stage can never stay blank. `animation-fill-mode: both`
+ * holds the end (visible) state after the (short) run completes.
+ * ------------------------------------------------------------------------- */
+@keyframes gv-slide-enter {
+  from {
+    opacity: 0;
+    transform: translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gv-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes gv-fade-only {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Whole-slide entrance — applied on every slide change (key remount). */
+.gv-slide-enter {
+  animation: gv-slide-enter 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Per-element reveal with optional stagger via inline `--gv-i`. */
+.gv-reveal {
+  animation: gv-fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--gv-delay, calc(0.12s + var(--gv-i, 0) * 0.11s));
+}
+.gv-fade {
+  animation: gv-fade-only 0.7s ease both;
+  animation-delay: var(--gv-delay, 0s);
+}
+
+@keyframes gv-scale-y {
+  from {
+    opacity: 0;
+    transform: scaleY(0);
+  }
+  to {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+.gv-rise {
+  animation: gv-scale-y 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: calc(var(--gv-base, 0.6s) + var(--gv-i, 0) * 0.08s);
+  transform-origin: bottom;
+}
+
+@keyframes gv-pop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.gv-pop {
+  animation: gv-pop 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--gv-delay, 0.4s);
+}
+
+@keyframes gv-pop-scale {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+.gv-pop-scale {
+  animation: gv-pop-scale 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--gv-delay, 0.4s);
+}
+
+@keyframes gv-scale-in {
+  from {
+    transform: scale(0.92);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+.gv-scale-in {
+  animation: gv-scale-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation-delay: var(--gv-delay, 0.2s);
+}
+
+/* Chart bar grow — document-timeline safe (slides 9+). */
+.gv-chart-bar {
+  animation: gv-scale-y 1.4s cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: var(--gv-delay, 0.2s);
+  transform-origin: bottom;
+}
+
+/* Donut / arc stroke fill. Set --gv-dash-total and --gv-dash-offset inline. */
+@keyframes gv-donut-arc {
+  from {
+    stroke-dashoffset: var(--gv-dash-total);
+  }
+  to {
+    stroke-dashoffset: var(--gv-dash-offset);
+  }
+}
+.gv-donut-arc {
+  animation: gv-donut-arc 1.8s cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: var(--gv-delay, 0.3s);
+}
+
+/* Horizontal line draw for timelines / flow connectors. */
+@keyframes gv-line-draw {
+  from {
+    stroke-dashoffset: var(--gv-line-len);
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+.gv-draw-line {
+  stroke-dasharray: var(--gv-line-len);
+  animation: gv-line-draw var(--gv-draw-dur, 2s) cubic-bezier(0.65, 0, 0.35, 1) both;
+  animation-delay: var(--gv-delay, 0.4s);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
