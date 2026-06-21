@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import SlideShell from "../SlideShell";
 import StageBackground from "../StageBackground";
 import { CssAnimRoot } from "../cssAnimRestart";
@@ -6,6 +7,7 @@ import { Kicker, Title, Grad, Support, GlassCard, TrendArrow } from "../primitiv
 import { colors, ease, font, STAGE } from "../../theme";
 import { PaybackTimeline, KpiCard } from "../charts";
 import empireStateNight from "../../assets/empire-state-night.jpg";
+import empireStateTriptych from "../../assets/empire-state-triptych.png";
 import logo from "../../assets/sasyas-logo-transparent.png";
 
 /* ============================= SLIDE 19 — PASAPORT ========================= */
@@ -21,7 +23,7 @@ export function Slide19() {
       <Title size={86} style={{ marginTop: 22, maxWidth: 1500 }}>
         Sertifikanız artık <Grad>uluslararası pasaportunuz.</Grad>
       </Title>
-      <Support style={{ marginTop: 30 }}>Küresel sermayenin yeni kapısı: yeşil gayrimenkul.</Support>
+      <Support style={{ marginTop: 30 }}>Uluslararası sermayenin yeni kapısı: yeşil gayrimenkul.</Support>
 
       <div style={{ display: "flex", gap: 50, marginTop: 70, justifyContent: "center" }}>
         {certs.map((c, i) => (
@@ -78,7 +80,7 @@ export function Slide20() {
         <div style={{ fontFamily: font.heading, fontSize: 56, color: colors.softGray, textAlign: "center" }}>vs</div>
 
         <div style={{ display: "flex", gap: 32 }}>
-          <ReturnCard value="%11–%31" label="kira primi" delay={0.9} />
+          <ReturnCard value="%25–%31" label="kira primi" delay={0.9} />
           <ReturnCard value="%25–%30" label="enerji tasarrufu" delay={1.2} />
         </div>
       </div>
@@ -208,16 +210,12 @@ export function Slide22() {
           padding: "110px 130px",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "center",
+          justifyContent: "flex-end",
           maxWidth: 1150,
         }}
       >
-        <Kicker>Empire State Building</Kicker>
-        <Title size={104} style={{ marginTop: 26 }}>
-          Enerji canavarından <Grad>yeşil değere.</Grad>
-        </Title>
-        <Support style={{ marginTop: 36, fontSize: 34 }}>
-          Yönetim radikal bir karar aldı: yenilemeye yeşil dönüşümü de dahil ettiler.
+        <Support style={{ fontSize: 28, color: "rgba(170,183,200,0.55)", fontStyle: "italic" }}>
+          Radikal bir yenileme kararı alındı…
         </Support>
       </div>
     </CssAnimRoot>
@@ -229,9 +227,6 @@ export function Slide23() {
   return (
     <SlideShell pad={120}>
       <Kicker>Empire State · yeşil dönüşüm</Kicker>
-      <Title size={70} style={{ marginTop: 18 }}>
-        Sürdürülebilirlik, <Grad>en kârlı yatırım.</Grad>
-      </Title>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, marginTop: 44 }}>
         <KpiCard value={6514} label="cam · sökülmeden 3 katmanlı" tone="white" delay={0.4} />
@@ -250,6 +245,61 @@ export function Slide23() {
         />
       </div>
     </SlideShell>
+  );
+}
+
+/* ============================= SLIDE 23b — EMPIRE REVEAL ================== */
+export function Slide23b() {
+  const [showImage, setShowImage] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShowImage(true), 2200);
+    return () => clearTimeout(t);
+  }, []);
+
+  return (
+    <CssAnimRoot style={{ position: "absolute", inset: 0, width: STAGE.width, height: STAGE.height }}>
+      <StageBackground variant="quiet" />
+      <div
+        style={{
+          position: "relative",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          padding: "80px 120px",
+          gap: 48,
+        }}
+      >
+        <motion.div
+          initial={{ opacity: 0, y: 36, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 1.1, ease: ease.out }}
+          style={{ textAlign: "center" }}
+        >
+          <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
+          <Title size={118} style={{ marginTop: 24 }}>
+            <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
+          </Title>
+        </motion.div>
+
+        {showImage && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.2, ease: ease.out }}
+            style={{ width: "100%", maxWidth: 1180, borderRadius: 24, overflow: "hidden", boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)" }}
+          >
+            <img
+              src={empireStateTriptych}
+              alt="Empire State Building — gündüz, gün batımı ve gece"
+              style={{ width: "100%", height: 520, objectFit: "cover", display: "block" }}
+            />
+          </motion.div>
+        )}
+      </div>
+    </CssAnimRoot>
   );
 }
 
@@ -364,7 +414,7 @@ export function Slide24() {
       </div>
 
       <Support style={{ fontSize: 26, textAlign: "center", margin: "0 auto" }}>
-        Yeşil değer; bir vizyon değil, küresel sermayeye — finansmana erişimin ta kendisi.
+        Yeşil değer; bir vizyon değil, uluslararası sermayeye — finansmana erişimin ta kendisi.
       </Support>
     </SlideShell>
   );
@@ -651,14 +701,13 @@ export function Slide27() {
             height: 88,
             width: "auto",
             objectFit: "contain",
-            filter: "drop-shadow(0 6px 22px rgba(0,0,0,0.45))",
+            filter: "brightness(0) invert(1) drop-shadow(0 6px 22px rgba(0,0,0,0.45))",
             marginBottom: 48,
           }}
         />
 
         <Title size={132} style={{ maxWidth: 1400 }}>
-          Dinlediğiniz için{" "}
-          <Grad from={colors.blueSoft} to={colors.greenNeon}>teşekkürler.</Grad>
+          <Grad from={colors.blueSoft} to={colors.greenNeon}>Teşekkürler.</Grad>
         </Title>
 
         <Support style={{ marginTop: 42, fontSize: 32, maxWidth: 980 }}>

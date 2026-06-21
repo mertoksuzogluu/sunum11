@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
+import { SlideRevealProvider } from "./slideReveal";
 import slidesData from "../data/slides.json";
 import { colors, ease, font } from "../theme";
 
@@ -30,14 +31,35 @@ export default function Deck() {
   const [nav, setNav] = useState<NavState>(initialNav);
   const { index, epoch: playEpoch } = nav;
   const [notesOpen, setNotesOpen] = useState(false);
+  const [revealSubStep, setRevealSubStep] = useState(0);
+  const [revealMaxSteps, setRevealMaxSteps] = useState(0);
+
+  const setRevealSteps = useCallback((steps: number) => {
+    setRevealMaxSteps(Math.max(0, steps));
+  }, []);
+
+  useEffect(() => {
+    setRevealSubStep(0);
+    setRevealMaxSteps(0);
+  }, [index, playEpoch]);
 
   const step = useCallback((delta: number) => {
+    if (delta > 0 && revealSubStep < revealMaxSteps) {
+      setRevealSubStep((s) => s + 1);
+      return;
+    }
+    if (delta < 0 && revealSubStep > 0) {
+      setRevealSubStep((s) => s - 1);
+      return;
+    }
+    setRevealSubStep(0);
+    setRevealMaxSteps(0);
     setNav((prev) => {
       const next = clampIndex(prev.index + delta);
       if (next === prev.index) return prev;
       return { index: next, epoch: prev.epoch + 1 };
     });
-  }, []);
+  }, [revealSubStep, revealMaxSteps]);
 
   const go = useCallback((target: number) => {
     setNav((prev) => {
@@ -109,11 +131,13 @@ export default function Deck() {
     <>
       <StageScaler>
         <SlidePlayContext.Provider value={playEpoch}>
-          <div key={playEpoch} className="gv-slide-enter" style={{ position: "absolute", inset: 0 }}>
-            <Current />
-          </div>
+          <SlideRevealProvider subStep={revealSubStep} setRevealSteps={setRevealSteps}>
+            <div key={playEpoch} className="gv-slide-enter" style={{ position: "absolute", inset: 0 }}>
+              <Current />
+            </div>
 
-          <Chrome index={index} meta={meta} />
+            <Chrome index={index} meta={meta} />
+          </SlideRevealProvider>
         </SlidePlayContext.Provider>
       </StageScaler>
 

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import SlideShell from "../SlideShell";
-import { Kicker, Title, Grad, Support, GlassCard, TrendArrow, CountUp } from "../primitives";
+import { Kicker, Title, Grad, Support, GlassCard, TrendArrow, CountUp, ImageSlot } from "../primitives";
 import { colors, font } from "../../theme";
 import {
   BeforeAfterBars,
@@ -8,6 +8,7 @@ import {
   KpiCard,
   FlowDiagram,
 } from "../charts";
+import netherlandsSocialHousing from "../../assets/netherlands-social-housing-retrofit.jpg";
 
 /* ============================= SLIDE 10 — 1 HAFTA ========================== */
 export function Slide10() {
@@ -31,14 +32,21 @@ export function Slide10() {
             </span>
           </div>
           <Support style={{ marginTop: 40, fontSize: 28 }}>
-            Sakin aynı parayı ödüyor — ama artık enerji şirketine değil, binasının geleceğine.
+            Malik aynı parayı ödüyor — ama artık enerji şirketine değil, binasının geleceğine.
           </Support>
         </div>
         <div
           className="gv-reveal"
-          style={{ ["--gv-i" as string]: 3, display: "flex", justifyContent: "center" }}
+          style={{ ["--gv-i" as string]: 3, display: "flex", flexDirection: "column", justifyContent: "center", gap: 24 }}
         >
           <BeforeAfterBars before={100} after={26} beforeLabel="Dönüşüm öncesi tüketim" afterLabel="Dönüşüm sonrası tüketim" />
+          <ImageSlot
+            asset="asset: netherlands-social-housing-retrofit.jpg"
+            src={netherlandsSocialHousing}
+            caption="Utrecht, Kanaleneiland · sosyal konut yenilemesi"
+            tone="green"
+            style={{ height: 220 }}
+          />
         </div>
       </div>
     </SlideShell>
@@ -242,8 +250,8 @@ export function Slide14() {
       <Support style={{ marginTop: 30 }}>ABD'de 20.000 ofis binası incelendi — sonuçlar net.</Support>
 
       <div style={{ display: "flex", gap: 50, marginTop: 64 }}>
-        <BigDataCard value={31} label="LEED sertifikalı yapılarda daha yüksek kira" sub="ABD · 20.000 ofis binası" delay={0.5} />
-        <BigDataCard value={15} prefix="+" plus label="BREEAM sertifikalı ofislerde daha yüksek kira" sub="Londra ofis piyasası" delay={0.9} />
+        <BigDataCard value={31} label="LEED sertifikalı yapılarda daha yüksek kira" sub="ABD · 20.000 ofis binası" delay={0.5} source="cbre.com/insights/viewpoints/green-is-good-the-endurance-of-the-rent-premium-in-leed-certified-us-office-buildings" />
+        <BigDataCard value={27} prefix="+" plus label="BREEAM sertifikalı ofislerde daha yüksek kira" sub="Londra ofis piyasası" delay={0.9} source="savills.co.uk/research_articles/229130/381989-0" />
       </div>
     </SlideShell>
   );
@@ -256,6 +264,7 @@ function BigDataCard({
   delay,
   prefix = "",
   plus = false,
+  source,
 }: {
   value: number;
   label: string;
@@ -263,6 +272,7 @@ function BigDataCard({
   delay: number;
   prefix?: string;
   plus?: boolean;
+  source?: string;
 }) {
   return (
     <div className="gv-reveal" style={{ ["--gv-delay" as string]: `${delay}s`, flex: 1 }}>
@@ -275,6 +285,11 @@ function BigDataCard({
         </div>
         <div style={{ fontFamily: font.heading, fontWeight: 600, fontSize: 34, color: colors.iceWhite, marginTop: 20, maxWidth: 520 }}>{label}</div>
         <div style={{ fontFamily: font.body, fontSize: 24, color: colors.softGray, marginTop: 10 }}>{sub}</div>
+        {source && (
+          <div style={{ fontFamily: font.body, fontSize: 14, color: "rgba(170,183,200,0.35)", marginTop: 16, lineHeight: 1.4 }}>
+            {source}
+          </div>
+        )}
       </GlassCard>
     </div>
   );
@@ -317,7 +332,7 @@ export function Slide15() {
             Piyasa yeşil binayı zaten fiyatlıyor ve mevzuat da artık bu noktada.
           </div>
           <div style={{ fontFamily: font.body, fontSize: 17, color: "rgba(170,183,200,0.5)", marginTop: 14 }}>
-            Kaynak: Bakanlık · Türkiye Bina Sektörü Karbonsuzlaşma Yol Haritası
+            Kaynak: Çevre, Şehircilik ve İklim Değişikliği Bakanlığı · Türkiye Bina Sektörü Karbonsuzlaşma Yol Haritası
           </div>
         </div>
       </div>
@@ -472,8 +487,11 @@ export function Slide18() {
           <Title size={84} style={{ marginTop: 22 }}>
             Binanın değeri artık <Grad>yaşam döngüsünde</Grad> ölçülüyor.
           </Title>
-          <Support style={{ marginTop: 36, fontSize: 30 }}>
+          <Support style={{ marginTop: 36, fontSize: 28 }}>
             Karbonun büyük bölümü inşa edilirken oluşur. Mayıs 2026'dan itibaren tüm döngü değerlendirilecek.
+          </Support>
+          <Support style={{ marginTop: 22, fontSize: 26, color: colors.greenNeon }}>
+            2027 itibariyle 10.000 m²'den büyük tüm yapılardan bina yaşam döngüsü analizi zorunlu oldu.
           </Support>
         </div>
 
@@ -497,6 +515,7 @@ export function Slide18() {
                 ["--gv-dash-total" as string]: ringLen,
                 ["--gv-dash-offset" as string]: 0,
                 ["--gv-delay" as string]: "0.4s",
+                ["--gv-arc-dur" as string]: "3.6s",
                 filter: `drop-shadow(0 0 8px ${colors.greenNeon})`,
               }}
             />
@@ -520,7 +539,7 @@ export function Slide18() {
                 <div
                   className="gv-pop-scale"
                   style={{
-                    ["--gv-delay" as string]: `${0.8 + i * 0.28}s`,
+                    ["--gv-delay" as string]: `${0.8 + i * 0.42}s`,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",

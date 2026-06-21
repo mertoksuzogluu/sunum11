@@ -4,6 +4,7 @@ import SlideShell from "../SlideShell";
 import { Kicker, Title, Grad, Support, ImageSlot, Pill, GlassCard } from "../primitives";
 import { fadeUp, fadeIn, scaleIn } from "../motion";
 import { useSlidePlayKey } from "../slideContext";
+import { useRevealSteps, useRevealVisible } from "../slideReveal";
 import { colors, ease, font } from "../../theme";
 import logo from "../../assets/sasyas-logo-transparent.png";
 import fordModelT from "../../assets/ford-model-t.png";
@@ -30,7 +31,14 @@ export function Slide01() {
         src={logo}
         alt="SAsya's"
         variants={fadeUp}
-        style={{ height: 104, width: "auto", objectFit: "contain", filter: "drop-shadow(0 6px 22px rgba(0,0,0,0.45))", alignSelf: "flex-start", marginBottom: 64 }}
+        style={{
+          height: 104,
+          width: "auto",
+          objectFit: "contain",
+          filter: "brightness(0) invert(1) drop-shadow(0 6px 22px rgba(0,0,0,0.45))",
+          alignSelf: "flex-start",
+          marginBottom: 64,
+        }}
       />
 
       <Kicker>Emlak Konut Anahtar Fikirler Zirvesi 2026</Kicker>
@@ -41,7 +49,7 @@ export function Slide01() {
 
       <motion.div variants={fadeUp} style={{ marginTop: 30, maxWidth: 1120 }}>
         <span style={{ fontFamily: font.heading, fontWeight: 500, fontSize: 46, color: colors.iceWhite, lineHeight: 1.18 }}>
-          Sürdürülebilirlik gayrimenkulün yeni finansal göstergesi
+          Sürdürülebilirlik Gayrimenkulün yeni finansal göstergesi
         </span>
       </motion.div>
 
@@ -193,6 +201,8 @@ function CityCore() {
 
 /* ============================= SLIDE 2 — THE QUESTION ======================= */
 export function Slide02() {
+  useRevealSteps(1);
+  const showAnswer = useRevealVisible(1);
   const options = ["Müteahhit mi?", "Yatırımcı mı?", "Banka mı?"];
   return (
     <SlideShell>
@@ -225,28 +235,30 @@ export function Slide02() {
         ))}
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1.6, duration: 0.9, ease: ease.out }}
-        style={{ marginTop: 64, display: "flex", justifyContent: "center" }}
-      >
-        <div
-          style={{
-            padding: "44px 80px",
-            borderRadius: 999,
-            background: "linear-gradient(135deg, rgba(35,209,139,0.18), rgba(30,115,232,0.12))",
-            border: `1.5px solid ${colors.greenNeon}`,
-            boxShadow: `0 0 70px -10px ${colors.greenNeon}aa`,
-            fontFamily: font.heading,
-            fontWeight: 700,
-            fontSize: 60,
-            color: colors.iceWhite,
-          }}
+      {showAnswer && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: ease.out }}
+          style={{ marginTop: 64, display: "flex", justifyContent: "center" }}
         >
-          Yoksa <Grad from={colors.green} to={colors.greenNeon}>son kullanıcı</Grad> mı?
-        </div>
-      </motion.div>
+          <div
+            style={{
+              padding: "44px 80px",
+              borderRadius: 999,
+              background: "linear-gradient(135deg, rgba(35,209,139,0.18), rgba(30,115,232,0.12))",
+              border: `1.5px solid ${colors.greenNeon}`,
+              boxShadow: `0 0 70px -10px ${colors.greenNeon}aa`,
+              fontFamily: font.heading,
+              fontWeight: 700,
+              fontSize: 60,
+              color: colors.iceWhite,
+            }}
+          >
+            Yoksa <Grad from={colors.green} to={colors.greenNeon}>son kullanıcı</Grad> mı?
+          </div>
+        </motion.div>
+      )}
     </SlideShell>
   );
 }
@@ -270,9 +282,6 @@ export function Slide03() {
           {showText && (
             <motion.div className="gv-fade" initial={{ y: 28 }} animate={{ y: 0 }} transition={{ duration: 0.7, ease }}>
               <Kicker>Dönem 1</Kicker>
-              <Title size={108} style={{ marginTop: 26 }}>
-                Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
-              </Title>
               <Support style={{ marginTop: 36, fontSize: 40 }}>Talep yüksek, üretim sınırlıydı.</Support>
             </motion.div>
           )}
@@ -296,6 +305,13 @@ export function Slide03() {
 export function Slide04() {
   const full = "İstediğiniz rengi seçebilirsiniz…\nyeter ki siyah olsun.";
   const text = useTypewriter(full, 0.9, 42);
+  const [showTitle, setShowTitle] = useState(false);
+
+  useEffect(() => {
+    const t = setTimeout(() => setShowTitle(true), 30000);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <SlideShell>
       <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>
@@ -329,6 +345,18 @@ export function Slide04() {
       >
         Bu kibir değil — o günkü üretim şartlarının sonucu. Ne üretse satacağını biliyordu.
       </motion.div>
+      {showTitle && (
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: ease.out }}
+          style={{ marginTop: 48 }}
+        >
+          <Title size={88}>
+            Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
+          </Title>
+        </motion.div>
+      )}
     </SlideShell>
   );
 }
@@ -357,6 +385,8 @@ function useTypewriter(full: string, startDelay: number, cps: number) {
 
 /* ============================= SLIDE 5 — SATABİLECEĞİMİ ÜRETİRİM =========== */
 export function Slide05() {
+  useRevealSteps(1);
+  const showTitle = useRevealVisible(1);
   // Three bubbles flank each side of the central image, vertically spaced.
   // `side` keeps them clear of the headline and symmetric around the visual.
   const bubbles: { label: string; side: "left" | "right"; top: number; order: number }[] = [
@@ -370,9 +400,13 @@ export function Slide05() {
   return (
     <SlideShell>
       <Kicker>Dönem 2</Kicker>
-      <Title size={104} style={{ marginTop: 24 }}>
-        Satabileceğimi <Grad>üretirim.</Grad>
-      </Title>
+      {showTitle && (
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: ease.out }}>
+          <Title size={104} style={{ marginTop: 24 }}>
+            Satabileceğimi <Grad>üretirim.</Grad>
+          </Title>
+        </motion.div>
+      )}
 
       <div style={{ position: "relative", marginTop: 64, height: 560 }}>
         <motion.div variants={scaleIn} style={{ position: "absolute", left: 470, right: 470, top: 0, bottom: 0 }}>
@@ -407,20 +441,26 @@ export function Slide05() {
 
 /* ============================= SLIDE 6 — FİNANSIN KURALI ==================== */
 export function Slide06() {
+  useRevealSteps(1);
+  const showTitle = useRevealVisible(1);
   return (
     <SlideShell>
       <div style={{ display: "grid", gridTemplateColumns: "0.85fr 1.15fr", gap: 80, alignItems: "center", height: "100%" }}>
         <div>
           <Kicker>Dönem 3</Kicker>
-          <Title size={88} style={{ marginTop: 26 }}>
-            Finansın kuralına uyan <Grad>ürünü</Grad> üretirim.
-          </Title>
-          <Support style={{ marginTop: 34 }}>Arzı ve talebi buluşturan köprü artık finans kurumları.</Support>
+          {showTitle && (
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: ease.out }}>
+              <Title size={88} style={{ marginTop: 26 }}>
+                Finansın kuralına uyan <Grad>ürünü</Grad> üretirim.
+              </Title>
+              <Support style={{ marginTop: 34 }}>Arzı ve talebi buluşturan köprü artık finans kurumları.</Support>
+            </motion.div>
+          )}
           <motion.div variants={fadeUp} style={{ marginTop: 40 }}>
             <ImageSlot
               asset="asset: young-family-dreaming.jpg"
               src={youngFamilyDreaming}
-              caption="Genç aile · ev hayali"
+              caption="Genç Türk ailesi · ev hayali"
               tone="dark"
               style={{ height: 220, width: 380 }}
             />
@@ -549,16 +589,16 @@ export function Slide08() {
 
 function BillDrop() {
   const playKey = useSlidePlayKey();
-  // Continuously counts the monthly bill DOWN from 2400 → 620 so the figure
-  // visibly "falls". Slowed down for stage readability.
   const START = 2400;
-  const END = 620;
-  const START_DELAY = 1100; // ms before the drop begins
-  const DURATION = 2800; // ms — slower, more deliberate fall
+  const END = 624; // ~74% reduction from 2400; final display shows %74, not the amount
+  const START_DELAY = 1100;
+  const DURATION = 2800;
   const [val, setVal] = useState(START);
+  const [done, setDone] = useState(false);
 
   useEffect(() => {
     setVal(START);
+    setDone(false);
     let raf = 0;
     let t0 = 0;
     const tick = (t: number) => {
@@ -569,10 +609,13 @@ function BillDrop() {
         return;
       }
       const p = Math.min(elapsed / DURATION, 1);
-      const eased = 1 - Math.pow(1 - p, 3); // ease-out cubic
+      const eased = 1 - Math.pow(1 - p, 3);
       setVal(START + (END - START) * eased);
-      if (p < 1) raf = requestAnimationFrame(tick);
-      else setVal(END);
+      if (p < 1) {
+        raf = requestAnimationFrame(tick);
+      } else {
+        setDone(true);
+      }
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
@@ -582,18 +625,33 @@ function BillDrop() {
 
   return (
     <div style={{ marginTop: 30 }}>
-      <div
-        style={{
-          fontFamily: font.heading,
-          fontWeight: 700,
-          fontSize: 120,
-          lineHeight: 1,
-          color: dropped ? colors.greenNeon : "#E0B07A",
-          transition: "color 0.6s ease",
-        }}
-      >
-        ₺{Math.round(val).toLocaleString("tr-TR")}
-      </div>
+      {!done ? (
+        <div
+          style={{
+            fontFamily: font.heading,
+            fontWeight: 700,
+            fontSize: 120,
+            lineHeight: 1,
+            color: dropped ? colors.greenNeon : "#E0B07A",
+            transition: "color 0.6s ease",
+          }}
+        >
+          ₺{Math.round(val).toLocaleString("tr-TR")}
+        </div>
+      ) : (
+        <div
+          style={{
+            fontFamily: font.heading,
+            fontWeight: 700,
+            fontSize: 120,
+            lineHeight: 1,
+            color: colors.greenNeon,
+            textShadow: `0 0 50px ${colors.green}66`,
+          }}
+        >
+          %74
+        </div>
+      )}
       <div
         className="gv-reveal"
         style={{
@@ -607,7 +665,9 @@ function BillDrop() {
         <svg width="40" height="60" viewBox="0 0 40 60">
           <path d="M20 4 L20 50 M20 50 L8 36 M20 50 L32 36" stroke={colors.greenNeon} strokeWidth="4" fill="none" strokeLinecap="round" style={{ filter: `drop-shadow(0 0 8px ${colors.greenNeon})` }} />
         </svg>
-        <span style={{ fontFamily: font.body, fontSize: 30, color: colors.greenNeon, fontWeight: 600 }}>~%74 daha az</span>
+        <span style={{ fontFamily: font.body, fontSize: 30, color: colors.greenNeon, fontWeight: 600 }}>
+          {done ? "enerji tüketiminde düşüş" : "~%74 daha az"}
+        </span>
       </div>
     </div>
   );

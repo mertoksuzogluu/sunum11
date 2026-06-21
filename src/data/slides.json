@@ -2,7 +2,7 @@
   {
     "id": 1,
     "title": "Yeşil Değer",
-    "subtitle": "Sürdürülebilirlik gayrimenkulün yeni finansal göstergesi",
+    "subtitle": "Sürdürülebilirlik Gayrimenkulün yeni finansal göstergesi",
     "visualDirection": "Koyu lacivert zemin, yeşil-mavi neon orbit, soyut bina çizgileri, SAsya's logosu.",
     "chartType": "none",
     "animationDirection": "Başlık yavaş fade-in; neon çizgi etrafında dönsün.",
@@ -111,10 +111,10 @@
     "id": 13,
     "title": "Piyasa yeşili zaten fiyatlıyor.",
     "subtitle": "ABD'de 20.000 ofis binası incelendi.",
-    "visualDirection": "İki büyük veri kartı: LEED +%31, BREEAM +%15; sayılar count-up.",
+    "visualDirection": "İki büyük veri kartı: LEED +%31, BREEAM +%27; sayılar count-up.",
     "chartType": "kpi-pair",
     "animationDirection": "Sayılar count-up ile gelsin.",
-    "speakerNotes": "Yapılan bir araştırmada ABD'de 20.000 ofis binası incelendiğinde, LEED sertifikalı binaların ortalama kirasının diğerlerine göre %31 daha yüksek olduğu tespit edildi. Başka bir araştırmaya göre BREEAM sertifikalı yapılarda bu oran Londra'da %15'in üzerinde. Bu ek bir özellik değil, doğrudan finansal gerçek."
+    "speakerNotes": "Yapılan bir araştırmada ABD'de 20.000 ofis binası incelendiğinde, LEED sertifikalı binaların ortalama kirasının diğerlerine göre %31 daha yüksek olduğu tespit edildi. Başka bir araştırmaya göre BREEAM sertifikalı yapılarda bu oran Londra'da %27'nin üzerinde. Bu ek bir özellik değil, doğrudan finansal gerçek."
   },
   {
     "id": 14,
@@ -199,15 +199,24 @@
   },
   {
     "id": 23,
+    "title": "Empire State Building",
+    "subtitle": "Gündüzden geceye — ikonik bir yeşil dönüşüm.",
+    "visualDirection": "Bina adı animasyonla belirir; ardından üçlü Empire State görseli (gündüz / gün batımı / gece) sinematik fade-in.",
+    "chartType": "none",
+    "animationDirection": "Önce isim, 2 sn sonra görsel.",
+    "speakerNotes": "Dünyanın en ikonik yapılarından biri: Empire State Building. Radikal yenileme kararıyla enerji canavarından yeşil değere dönüştü."
+  },
+  {
+    "id": 24,
     "title": "Yeşil: yeni lüks değil, finansal alfabe.",
     "subtitle": "Finansal risk yönetimi · Makroekonomik vizyon · Regülasyon",
     "visualDirection": "Soyut finans + şehir + yeşil enerji ağı; üç kavram triangulation gibi merkezde birleşsin.",
     "chartType": "triangulation",
     "animationDirection": "Üç kavram merkezde birleşsin; ESG vurgusu.",
-    "speakerNotes": "Artık bir gayrimenkulün değerini sadece konumu belirlemiyor; karbon ayak izi, enerji verimliliği ve dünyaya ne bıraktığı belirliyor. Yeşil; gayrimenkulün yeni lüksü değil, yeni finansal alfabesi. Küresel bir trend ya da sempatik bir iyilik hareketi değil; finansal risk yönetimi, makroekonomik vizyon ve regülasyon demek. Sayın girişimciler ve geliştiriciler: yatırımın yeni şifresi ESG. Cebinizde dünyanın en parlak projesi olsa da, merkezinde yeşil bir strateji yoksa küresel sermayeden tek kuruş fon alamazsınız. Yeşil değer, finansmana erişimin ta kendisi."
+    "speakerNotes": "Artık bir gayrimenkulün değerini sadece konumu belirlemiyor; karbon ayak izi, enerji verimliliği ve dünyaya ne bıraktığı belirliyor. Yeşil; gayrimenkulün yeni lüksü değil, yeni finansal alfabesi. Küresel bir trend ya da sempatik bir iyilik hareketi değil; finansal risk yönetimi, makroekonomik vizyon ve regülasyon demek. Sayın girişimciler ve geliştiriciler: yatırımın yeni şifresi ESG. Cebinizde dünyanın en parlak projesi olsa da, merkezinde yeşil bir strateji yoksa uluslararası sermayeden tek kuruş fon alamazsınız. Yeşil değer, finansmana erişimin ta kendisi."
   },
   {
-    "id": 24,
+    "id": 25,
     "title": "Peki ya ölçemediğimiz değer?",
     "subtitle": "Fayda-maliyet analizine sığmayan, insana dokunan değer.",
     "visualDirection": "İnsan merkezli mimari / yeşil ofis / okul; kavramlar insan silüetinin etrafında yumuşakça belirsin.",
@@ -216,7 +225,7 @@
     "speakerNotes": "Şu ana kadar bunun bir iyilik hareketi değil, finansal bir gerçek olduğunu rakamlarla anlattım. Şimdi ölçemediğimiz ama insan hayatına etkisi büyük olan değerden bahsedelim. Fayda-maliyet analizinde gösteremediğimiz bir gerçek var: insan sağlığı, işe katılım ve verimlilik, temiz hava, iklimlendirmenin öğrenme üzerindeki etkisi, yeşil ofislerde azalan devamsızlık, maaş verimi, çevresel boyut."
   },
   {
-    "id": 25,
+    "id": 26,
     "title": "Yakın gelecekte iki tür gayrimenkul olacak.",
     "subtitle": "Siz projelerinizle, girişiminizle hangi tarafta kalacaksınız?",
     "visualDirection": "Ekran ikiye ayrılsın — Sol: Yeşil olanlar (mavi/yeşil ışıkla yükselir). Sağ: Değer kaybedenler (koyu/kahve, geride kalır). Son soru tek başına büyük.",
@@ -225,12 +234,12 @@
     "speakerNotes": "İster makroekonomik vizyon ve regülasyonlar açısından bakın, ister insan odaklı yaklaşımla bakın, fark etmez. Yakın gelecekte iki tür gayrimenkul olacak: yeşil olanlar ve değer kaybedenler. Siz projelerinizle, girişiminizle hangi tarafta kalacaksınız, bir düşünmenizi isterim. Son slaytta kapanış."
   },
   {
-    "id": 26,
-    "title": "Dinlediğiniz için teşekkürler.",
+    "id": 27,
+    "title": "Teşekkürler.",
     "subtitle": "Sinem Yedikardaşlar · SAsya's",
-    "visualDirection": "Sade, merkez hizalı kapanış; neon çizgi; açılış slaytına ayna görünüm.",
+    "visualDirection": "Sade, merkez hizalı kapanış; beyaz logo; neon çizgi; açılış slaytına ayna görünüm.",
     "chartType": "none",
     "animationDirection": "Teşekkür metni fade-up; konuşmacı bilgisi kademeli belirsin.",
-    "speakerNotes": "Dinlediğiniz için çok teşekkür ederim. Yeşil Değer artık gayrimenkulün vicdani tercihi değil, bilançosundaki yeni satır. Sorularınız varsa memnuniyetle yanıtlarım. İyi günler dilerim."
+    "speakerNotes": "Çok teşekkür ederim. Yeşil Değer artık gayrimenkulün vicdani tercihi değil, bilançosundaki yeni satır. Sorularınız varsa memnuniyetle yanıtlarım. İyi günler dilerim."
   }
 ]
