@@ -177,48 +177,38 @@ export function Slide21() {
 /* ============================= SLIDE 22 — EMPIRE STATE HERO =============== */
 export function Slide22() {
   return (
-    <CssAnimRoot style={{ position: "absolute", inset: 0, width: STAGE.width, height: STAGE.height }}>
-      <StageBackground variant="quiet" />
-      <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: 760 }}>
-        <div className="gv-fade" style={{ ["--gv-delay" as string]: "0.2s", position: "absolute", inset: 0, overflow: "hidden" }}>
+    <SlideShell bg="quiet">
+      <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 70, alignItems: "center", height: "100%" }}>
+        <div>
+          <Kicker>Empire State Building · New York</Kicker>
+          <Title size={88} style={{ marginTop: 26 }}>
+            Radikal bir yenileme kararı <Grad>alındı.</Grad>
+          </Title>
+        </div>
+
+        <div
+          className="gv-scale-in"
+          style={{
+            ["--gv-delay" as string]: "0.35s",
+            position: "relative",
+            borderRadius: 24,
+            overflow: "hidden",
+            height: 680,
+            boxShadow: "0 40px 120px -30px rgba(0,0,0,0.8)",
+          }}
+        >
           <img
             src={empireStateNight}
             alt="Empire State Building at night, New York"
-            className="gv-scale-in"
-            style={{
-              ["--gv-delay" as string]: "0.2s",
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center top",
-            }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
           />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(90deg, #04122b 0%, rgba(4,18,43,0.35) 45%, transparent 70%)" }} />
-          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(3,16,31,0.15) 30%, rgba(3,16,31,0.75) 100%)" }} />
-          <div style={{ position: "absolute", left: 30, bottom: 24, fontFamily: font.body, fontSize: 15, color: "rgba(170,183,200,0.55)", fontStyle: "italic" }}>
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 55%, rgba(3,16,31,0.65) 100%)" }} />
+          <div style={{ position: "absolute", left: 24, bottom: 20, fontFamily: font.body, fontSize: 15, color: "rgba(170,183,200,0.55)", fontStyle: "italic" }}>
             Empire State Building · New York (gece)
           </div>
         </div>
       </div>
-
-      <div
-        style={{
-          position: "relative",
-          height: "100%",
-          padding: "110px 130px",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-end",
-          maxWidth: 1150,
-        }}
-      >
-        <Support style={{ fontSize: 28, color: "rgba(170,183,200,0.55)", fontStyle: "italic" }}>
-          Radikal bir yenileme kararı alındı…
-        </Support>
-      </div>
-    </CssAnimRoot>
+    </SlideShell>
   );
 }
 

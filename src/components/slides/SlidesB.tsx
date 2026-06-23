@@ -558,10 +558,7 @@ export function Slide18() {
           <Title size={84} style={{ marginTop: 22 }}>
             Binanın değeri artık <Grad>yaşam döngüsünde</Grad> ölçülüyor.
           </Title>
-          <Support style={{ marginTop: 36, fontSize: 28 }}>
-            Karbonun büyük bölümü inşa edilirken oluşur. Mayıs 2026'dan itibaren tüm döngü değerlendirilecek.
-          </Support>
-          <Support style={{ marginTop: 22, fontSize: 26, color: colors.greenNeon }}>
+          <Support style={{ marginTop: 36, fontSize: 26, color: colors.greenNeon }}>
             2027 itibariyle 10.000 m²'den büyük tüm yapılardan bina yaşam döngüsü analizi zorunlu oldu.
           </Support>
         </div>
