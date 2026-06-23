@@ -1,35 +1,25 @@
-import { createContext, useContext, useMemo, type CSSProperties, type ReactNode } from "react";
 import { motion } from "framer-motion";
+import type { CSSProperties, ReactNode } from "react";
 import { ease } from "../theme";
 
-type SlideRevealCtx = {
-  slideIndex: number;
-  revealBySlide: Readonly<Record<number, number>>;
+/** Optional prop every slide may receive from Deck. */
+export type SlideRevealProps = {
+  revealStep?: number;
 };
-
-export const SlideRevealContext = createContext<SlideRevealCtx>({
-  slideIndex: 0,
-  revealBySlide: {},
-});
-
-/** True when the current slide has reached the required reveal step. */
-export function useRevealVisible(requiredStep = 1) {
-  const { slideIndex, revealBySlide } = useContext(SlideRevealContext);
-  return (revealBySlide[slideIndex] ?? 0) >= requiredStep;
-}
 
 /** Animated block shown after a reveal click on the current slide. */
 export function RevealBlock({
-  step = 1,
+  revealStep = 0,
+  requiredStep = 1,
   style,
   children,
 }: {
-  step?: number;
+  revealStep?: number;
+  requiredStep?: number;
   style?: CSSProperties;
   children: ReactNode;
 }) {
-  const visible = useRevealVisible(step);
-  if (!visible) return null;
+  if (revealStep < requiredStep) return null;
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
@@ -40,22 +30,6 @@ export function RevealBlock({
       {children}
     </motion.div>
   );
-}
-
-export function SlideRevealProvider({
-  slideIndex,
-  revealBySlide,
-  children,
-}: {
-  slideIndex: number;
-  revealBySlide: Record<number, number>;
-  children: ReactNode;
-}) {
-  const value = useMemo(
-    () => ({ slideIndex, revealBySlide }),
-    [slideIndex, revealBySlide],
-  );
-  return <SlideRevealContext.Provider value={value}>{children}</SlideRevealContext.Provider>;
 }
 
 /**
@@ -79,18 +53,16 @@ export function revealMaxForIndex(index: number) {
   return REVEAL_STEPS[index] ?? 0;
 }
 
-const TOTAL_REVEAL_STEPS = REVEAL_STEPS.reduce((sum, n) => sum + n, 0);
-
-/** Progress across the whole deck — every slide change and reveal click advances the bar. */
+/** Monotonic progress: current slide index + reveal fraction on this slide only. */
 export function revealProgressPct(
   slideIndex: number,
   totalSlides: number,
   revealBySlide: Record<number, number>,
 ) {
-  const maxUnits = totalSlides - 1 + TOTAL_REVEAL_STEPS;
-  let units = slideIndex;
-  for (let i = 0; i <= slideIndex; i++) {
-    units += revealBySlide[i] ?? 0;
-  }
-  return (units / maxUnits) * 100;
+  if (totalSlides <= 1) return 100;
+  const max = REVEAL_STEPS[slideIndex] ?? 0;
+  const sub = revealBySlide[slideIndex] ?? 0;
+  const withinSlide = max > 0 ? Math.min(sub / max, 1) : 0;
+  const position = slideIndex + withinSlide;
+  return Math.min(100, Math.max(0, (position / (totalSlides - 1)) * 100));
 }

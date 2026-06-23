@@ -1,9 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { createElement, useCallback, useEffect, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
-import { SlideRevealProvider, REVEAL_STEPS, revealMaxForIndex, revealProgressPct } from "./slideReveal";
+import { REVEAL_STEPS, revealMaxForIndex, revealProgressPct } from "./slideReveal";
 import slidesData from "../data/slides.json";
 import { colors, ease, font } from "../theme";
 
@@ -147,28 +147,27 @@ export default function Deck() {
 
   const Current = slideComponents[index];
   const meta = metaForDeckIndex(index);
+  const revealStep = revealBySlide[index] ?? 0;
 
   return (
     <>
       <StageScaler>
         <SlidePlayContext.Provider value={playEpoch}>
-          <SlideRevealProvider slideIndex={index} revealBySlide={revealBySlide}>
-            <div style={{ position: "absolute", inset: 0 }}>
-              <div key={`${index}-${playEpoch}`} className="gv-slide-enter" style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-                <Current />
-              </div>
-              <Chrome index={index} meta={meta} />
-              <div
-                aria-hidden
-                style={{ position: "absolute", inset: 0, zIndex: 20, cursor: "pointer" }}
-                onClick={() => step(1)}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  step(-1);
-                }}
-              />
+          <div style={{ position: "absolute", inset: 0 }}>
+            <div key={`${index}-${playEpoch}`} className="gv-slide-enter" style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+              {createElement(Current, { revealStep })}
             </div>
-          </SlideRevealProvider>
+            <Chrome index={index} meta={meta} />
+            <div
+              aria-hidden
+              style={{ position: "absolute", inset: 0, zIndex: 20, cursor: "pointer" }}
+              onClick={() => step(1)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                step(-1);
+              }}
+            />
+          </div>
         </SlidePlayContext.Provider>
       </StageScaler>
 
@@ -223,11 +222,11 @@ function Chrome({ index, meta }: { index: number; meta: SlideMeta }) {
 
 /* ----------------------------- Progress bar ----------------------------- */
 function ProgressBar({ pct }: { pct: number }) {
+  const width = Math.min(100, Math.max(0, pct));
   return (
     <div style={{ position: "fixed", left: 0, top: 0, right: 0, height: 4, background: "rgba(255,255,255,0.05)", zIndex: 50 }}>
       <motion.div
-        key={Math.round(pct * 10)}
-        animate={{ width: `${pct}%` }}
+        animate={{ width: `${width}%` }}
         transition={{ duration: 0.35, ease: ease.out }}
         style={{ height: "100%", background: `linear-gradient(90deg, ${colors.blueSoft}, ${colors.greenNeon})`, boxShadow: `0 0 12px ${colors.greenNeon}` }}
       />
