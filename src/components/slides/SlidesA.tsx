@@ -306,14 +306,15 @@ export function Slide03() {
 /* ============================= SLIDE 4 — FORD QUOTE ======================== */
 export function Slide04() {
   const full = "İstediğiniz rengi seçebilirsiniz…\nyeter ki siyah olsun.";
-  const text = useTypewriter(full, 0.9, 42);
-  const quoteDone = text.length >= full.length;
+  const [quoteSkipped, setQuoteSkipped] = useState(false);
+  const typed = useTypewriter(full, 0.9, 42);
+  const quoteDone = quoteSkipped || typed.length >= full.length;
 
   useRevealSteps(1);
   const showTitle = useRevealVisible(1);
-  useRevealGate(quoteDone || showTitle);
+  useRevealGate(quoteDone || showTitle, () => setQuoteSkipped(true));
 
-  const displayQuote = showTitle ? full : text;
+  const displayQuote = showTitle || quoteSkipped ? full : typed;
 
   return (
     <SlideShell>
@@ -363,22 +364,25 @@ export function Slide04() {
 function useTypewriter(full: string, startDelay: number, cps: number) {
   const [n, setN] = useState(0);
   useEffect(() => {
+    setN(0);
     let raf = 0;
     let start = 0;
     const delayMs = startDelay * 1000;
-    const step = (t: number) => {
+    const tick = (t: number) => {
       if (!start) start = t;
       const elapsed = t - start - delayMs;
+      let chars = 0;
       if (elapsed > 0) {
-        const chars = Math.min(full.length, Math.floor((elapsed / 1000) * cps));
+        chars = Math.min(full.length, Math.floor((elapsed / 1000) * cps));
         setN(chars);
       }
-      if (n < full.length) raf = requestAnimationFrame(step);
+      if (chars < full.length) {
+        raf = requestAnimationFrame(tick);
+      }
     };
-    raf = requestAnimationFrame(step);
+    raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [full]);
+  }, [full, startDelay, cps]);
   return full.slice(0, n);
 }
 

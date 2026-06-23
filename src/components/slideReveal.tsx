@@ -2,17 +2,19 @@ import { createContext, useContext, useLayoutEffect, type ReactNode } from "reac
 
 type SlideRevealCtx = {
   subStep: number;
-  setRevealSteps: (steps: number) => void;
+  registerRevealSteps: (steps: number) => void;
   /** When false, forward clicks are ignored (e.g. while an animation is still running). */
   gateOpen: boolean;
   setGateOpen: (open: boolean) => void;
+  registerGateBlockedForward: (handler: (() => void) | null) => void;
 };
 
 export const SlideRevealContext = createContext<SlideRevealCtx>({
   subStep: 0,
-  setRevealSteps: () => {},
+  registerRevealSteps: () => {},
   gateOpen: true,
   setGateOpen: () => {},
+  registerGateBlockedForward: () => {},
 });
 
 /** True when `subStep` has reached the registered reveal count. */
@@ -23,36 +25,42 @@ export function useRevealVisible(requiredStep = 1) {
 
 /** Call once on mount to require N click-advances before the deck leaves this slide. */
 export function useRevealSteps(steps: number) {
-  const { setRevealSteps } = useContext(SlideRevealContext);
+  const { registerRevealSteps } = useContext(SlideRevealContext);
   useLayoutEffect(() => {
-    setRevealSteps(steps);
-    return () => setRevealSteps(0);
-  }, [steps, setRevealSteps]);
+    registerRevealSteps(steps);
+    return () => registerRevealSteps(0);
+  }, [steps, registerRevealSteps]);
 }
 
-export function useRevealGate(open: boolean) {
-  const { setGateOpen } = useContext(SlideRevealContext);
+export function useRevealGate(open: boolean, onBlockedForward?: () => void) {
+  const { setGateOpen, registerGateBlockedForward } = useContext(SlideRevealContext);
   useLayoutEffect(() => {
     setGateOpen(open);
-    return () => setGateOpen(true);
-  }, [open, setGateOpen]);
+    registerGateBlockedForward(open ? null : (onBlockedForward ?? null));
+    return () => {
+      setGateOpen(true);
+      registerGateBlockedForward(null);
+    };
+  }, [open, onBlockedForward, setGateOpen, registerGateBlockedForward]);
 }
 
 export function SlideRevealProvider({
   subStep,
-  setRevealSteps,
+  registerRevealSteps,
   gateOpen,
   setGateOpen,
+  registerGateBlockedForward,
   children,
 }: {
   subStep: number;
-  setRevealSteps: (steps: number) => void;
+  registerRevealSteps: (steps: number) => void;
   gateOpen: boolean;
   setGateOpen: (open: boolean) => void;
+  registerGateBlockedForward: (handler: (() => void) | null) => void;
   children: ReactNode;
 }) {
   return (
-    <SlideRevealContext.Provider value={{ subStep, setRevealSteps, gateOpen, setGateOpen }}>
+    <SlideRevealContext.Provider value={{ subStep, registerRevealSteps, gateOpen, setGateOpen, registerGateBlockedForward }}>
       {children}
     </SlideRevealContext.Provider>
   );

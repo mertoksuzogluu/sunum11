@@ -10,8 +10,8 @@ function viewportSize() {
 }
 
 /**
- * Fixed 1920×1080 stage scaled to **cover** the viewport.
- * Uses translate + scale centering (more reliable than grid + transformOrigin).
+ * Fixed 1920×1080 stage scaled to **contain** the viewport.
+ * Entire 16:9 canvas stays visible — safe for projection without cropping chrome.
  */
 export default function StageScaler({ children }: { children: ReactNode }) {
   const [scale, setScale] = useState(1);
@@ -19,7 +19,7 @@ export default function StageScaler({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     const update = () => {
       const { w, h } = viewportSize();
-      setScale(Math.max(w / STAGE.width, h / STAGE.height));
+      setScale(Math.min(w / STAGE.width, h / STAGE.height));
     };
     update();
     window.addEventListener("resize", update);

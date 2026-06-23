@@ -31,47 +31,78 @@ export default function Deck() {
   const [nav, setNav] = useState<NavState>(initialNav);
   const { index, epoch: playEpoch } = nav;
   const [notesOpen, setNotesOpen] = useState(false);
+  const [fullscreen, setFullscreen] = useState(() => !!document.fullscreenElement);
   const [revealSubStep, setRevealSubStep] = useState(0);
   const [revealMaxSteps, setRevealMaxSteps] = useState(0);
   const [revealGateOpen, setRevealGateOpen] = useState(true);
   const revealBySlideRef = useRef<Record<number, number>>({});
+  const revealSubStepRef = useRef(0);
+  const revealMaxStepsRef = useRef(0);
+  const revealGateOpenRef = useRef(true);
+  const gateBlockedForwardRef = useRef<(() => void) | null>(null);
+  const indexRef = useRef(index);
 
-  const setRevealSteps = useCallback((steps: number) => {
-    setRevealMaxSteps(Math.max(0, steps));
+  indexRef.current = index;
+  revealSubStepRef.current = revealSubStep;
+  revealGateOpenRef.current = revealGateOpen;
+
+  const registerRevealSteps = useCallback((steps: number) => {
+    const v = Math.max(0, steps);
+    revealMaxStepsRef.current = v;
+    setRevealMaxSteps(v);
+  }, []);
+
+  const registerGateBlockedForward = useCallback((handler: (() => void) | null) => {
+    gateBlockedForwardRef.current = handler;
   }, []);
 
   useEffect(() => {
-    setRevealSubStep(revealBySlideRef.current[index] ?? 0);
+    const saved = revealBySlideRef.current[index] ?? 0;
+    revealSubStepRef.current = saved;
+    setRevealSubStep(saved);
+    revealGateOpenRef.current = true;
     setRevealGateOpen(true);
   }, [index, playEpoch]);
 
   const step = useCallback((delta: number) => {
-    if (delta > 0 && !revealGateOpen) return;
-    if (delta > 0 && revealSubStep < revealMaxSteps) {
-      const next = revealSubStep + 1;
-      revealBySlideRef.current[index] = next;
+    const idx = indexRef.current;
+    if (delta > 0 && !revealGateOpenRef.current) {
+      gateBlockedForwardRef.current?.();
+      return;
+    }
+
+    const sub = revealSubStepRef.current;
+    const max = revealMaxStepsRef.current;
+
+    if (delta > 0 && sub < max) {
+      const next = sub + 1;
+      revealSubStepRef.current = next;
+      revealBySlideRef.current[idx] = next;
       setRevealSubStep(next);
       return;
     }
-    if (delta < 0 && revealSubStep > 0) {
-      const next = revealSubStep - 1;
-      revealBySlideRef.current[index] = next;
+    if (delta < 0 && sub > 0) {
+      const next = sub - 1;
+      revealSubStepRef.current = next;
+      revealBySlideRef.current[idx] = next;
       setRevealSubStep(next);
       return;
     }
-    revealBySlideRef.current[index] = revealSubStep;
+
+    revealBySlideRef.current[idx] = sub;
+    revealSubStepRef.current = 0;
     setRevealSubStep(0);
-    setRevealMaxSteps(0);
     setNav((prev) => {
       const next = clampIndex(prev.index + delta);
       if (next === prev.index) return prev;
       return { index: next, epoch: prev.epoch + 1 };
     });
-  }, [revealSubStep, revealMaxSteps, revealGateOpen, index]);
+  }, []);
 
   const go = useCallback((target: number) => {
+    revealSubStepRef.current = 0;
     setRevealSubStep(0);
-    setRevealMaxSteps(0);
+    revealGateOpenRef.current = true;
     setRevealGateOpen(true);
     setNav((prev) => {
       const next = clampIndex(target);
@@ -83,8 +114,9 @@ export default function Deck() {
   useEffect(() => {
     const onHashChange = () => {
       const next = hashToIndex();
+      revealSubStepRef.current = 0;
       setRevealSubStep(0);
-      setRevealMaxSteps(0);
+      revealGateOpenRef.current = true;
       setRevealGateOpen(true);
       setNav((prev) => {
         if (next === prev.index) return prev;
@@ -93,6 +125,12 @@ export default function Deck() {
     };
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
+  }, []);
+
+  useEffect(() => {
+    const onFs = () => setFullscreen(!!document.fullscreenElement);
+    document.addEventListener("fullscreenchange", onFs);
+    return () => document.removeEventListener("fullscreenchange", onFs);
   }, []);
 
   useEffect(() => {
@@ -147,9 +185,10 @@ export default function Deck() {
         <SlidePlayContext.Provider value={playEpoch}>
           <SlideRevealProvider
             subStep={revealSubStep}
-            setRevealSteps={setRevealSteps}
+            registerRevealSteps={registerRevealSteps}
             gateOpen={revealGateOpen}
             setGateOpen={setRevealGateOpen}
+            registerGateBlockedForward={registerGateBlockedForward}
           >
             <div
               key={playEpoch}
@@ -169,8 +208,10 @@ export default function Deck() {
         </SlidePlayContext.Provider>
       </StageScaler>
 
-      <ProgressBar index={index} />
-      <NavControls index={index} step={step} notesOpen={notesOpen} setNotesOpen={setNotesOpen} />
+      <ProgressBar index={index} revealSubStep={revealSubStep} revealMaxSteps={revealMaxSteps} />
+      {!fullscreen && (
+        <NavControls index={index} step={step} notesOpen={notesOpen} setNotesOpen={setNotesOpen} />
+      )}
       <SpeakerNotes open={notesOpen} meta={meta} index={index} />
     </>
   );
@@ -199,13 +240,15 @@ function Chrome({ index, meta }: { index: number; meta: SlideMeta }) {
       <div
         style={{
           position: "absolute",
-          left: 64,
-          bottom: 56,
+          left: 72,
+          bottom: 48,
           fontFamily: font.body,
-          fontSize: 18,
+          fontSize: 17,
           color: "rgba(170,183,200,0.4)",
-          letterSpacing: "0.16em",
+          letterSpacing: "0.14em",
           textTransform: "uppercase",
+          maxWidth: 720,
+          lineHeight: 1.35,
         }}
       >
         Yeşil Değer · Anahtar Fikirler Zirvesi 2026
@@ -215,13 +258,22 @@ function Chrome({ index, meta }: { index: number; meta: SlideMeta }) {
 }
 
 /* ----------------------------- Progress bar ----------------------------- */
-function ProgressBar({ index }: { index: number }) {
-  const pct = ((index + 1) / TOTAL) * 100;
+function ProgressBar({
+  index,
+  revealSubStep,
+  revealMaxSteps,
+}: {
+  index: number;
+  revealSubStep: number;
+  revealMaxSteps: number;
+}) {
+  const slideProgress = revealMaxSteps > 0 ? revealSubStep / revealMaxSteps : 0;
+  const pct = ((index + slideProgress) / TOTAL) * 100;
   return (
     <div style={{ position: "fixed", left: 0, top: 0, right: 0, height: 4, background: "rgba(255,255,255,0.05)", zIndex: 50 }}>
       <motion.div
         animate={{ width: `${pct}%` }}
-        transition={{ duration: 0.5, ease: ease.out }}
+        transition={{ duration: 0.35, ease: ease.out }}
         style={{ height: "100%", background: `linear-gradient(90deg, ${colors.blueSoft}, ${colors.greenNeon})`, boxShadow: `0 0 12px ${colors.greenNeon}` }}
       />
     </div>
