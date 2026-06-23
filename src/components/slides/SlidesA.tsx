@@ -664,7 +664,7 @@ export function Slide09() {
         Hedef: <Grad>enerji faturasını</Grad> düşürmek.
       </Title>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 70, marginTop: 56, height: 560, alignItems: "stretch" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "0.92fr 1.08fr", gap: 70, marginTop: 48, flex: 1, minHeight: 0, alignItems: "stretch" }}>
         <div style={{ position: "relative", display: "flex", flexDirection: "column", justifyContent: "center" }}>
           {labels.map((l, i) => (
             <div
@@ -698,13 +698,14 @@ export function Slide09() {
           ))}
         </div>
 
-        <div className="gv-scale-in" style={{ ["--gv-delay" as string]: "0.4s", height: "100%" }}>
+        <div className="gv-scale-in" style={{ ["--gv-delay" as string]: "0.4s", height: "100%", minHeight: 620 }}>
           <ImageSlot
             asset="asset: netherlands-social-housing-retrofit.png"
             src={netherlandsSocialHousing}
             caption="Utrecht · prefabrik cephe yenilemesi ve güneş panelleri"
             tone="green"
-            style={{ height: "100%" }}
+            fit="contain"
+            style={{ height: "100%", minHeight: 620 }}
           />
         </div>
       </div>

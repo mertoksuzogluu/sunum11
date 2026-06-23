@@ -307,12 +307,14 @@ export function ImageSlot({
   children,
   style,
   src,
+  fit = "cover",
 }: {
   asset: string;
   caption?: string;
   tone?: "blue" | "green" | "dark" | "amber";
   children?: ReactNode;
   style?: CSSProperties;
+  fit?: "cover" | "contain";
   /** Drop a real photo in /public/assets and pass e.g. src="/assets/ford.jpg".
    *  The dark overlay + label keep the deck cohesive once imagery is added. */
   src?: string;
@@ -348,7 +350,14 @@ export function ImageSlot({
         <img
           src={src}
           alt={caption ?? asset}
-          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: fit,
+            objectPosition: "center center",
+          }}
         />
       )}
       {children}
@@ -357,7 +366,10 @@ export function ImageSlot({
         style={{
           position: "absolute",
           inset: 0,
-          background: "linear-gradient(180deg, rgba(3,16,31,0.05) 30%, rgba(3,16,31,0.75) 100%)",
+          background:
+            fit === "contain"
+              ? "linear-gradient(180deg, transparent 55%, rgba(3,16,31,0.82) 100%)"
+              : "linear-gradient(180deg, rgba(3,16,31,0.05) 30%, rgba(3,16,31,0.75) 100%)",
           pointerEvents: "none",
         }}
       />
