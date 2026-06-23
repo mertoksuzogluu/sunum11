@@ -1,9 +1,8 @@
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
 import SlideShell from "../SlideShell";
 import StageBackground from "../StageBackground";
 import { CssAnimRoot } from "../cssAnimRestart";
-import { useSlidePlayKey } from "../slideContext";
+import { RevealBlock, type SlideRevealProps } from "../slideReveal";
 import { Kicker, Title, Grad, Support, GlassCard, TrendArrow } from "../primitives";
 import { colors, ease, font, STAGE } from "../../theme";
 import { PaybackTimeline, KpiCard } from "../charts";
@@ -181,9 +180,8 @@ export function Slide22() {
     <SlideShell bg="quiet">
       <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 70, alignItems: "center", height: "100%" }}>
         <div>
-          <Kicker>Empire State Building · New York</Kicker>
-          <Title size={88} style={{ marginTop: 26 }}>
-            Radikal bir yenileme kararı <Grad>alındı.</Grad>
+          <Title size={88} style={{ marginTop: 0 }}>
+            Enerji canavarından <Grad>yeşil dönüşüme</Grad>
           </Title>
         </div>
 
@@ -200,13 +198,10 @@ export function Slide22() {
         >
           <img
             src={empireStateNight}
-            alt="Empire State Building at night, New York"
+            alt="İkonik gökdelen gece görünümü"
             style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
           />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 55%, rgba(3,16,31,0.65) 100%)" }} />
-          <div style={{ position: "absolute", left: 24, bottom: 20, fontFamily: font.body, fontSize: 15, color: "rgba(170,183,200,0.55)", fontStyle: "italic" }}>
-            Empire State Building · New York (gece)
-          </div>
         </div>
       </div>
     </SlideShell>
@@ -217,7 +212,7 @@ export function Slide22() {
 export function Slide23() {
   return (
     <SlideShell pad={120}>
-      <Kicker>Empire State · yeşil dönüşüm</Kicker>
+      <Kicker>Yeşil dönüşüm</Kicker>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, marginTop: 44 }}>
         <KpiCard value={6514} label="cam · sökülmeden 3 katmanlı" tone="white" delay={0.4} />
@@ -240,15 +235,8 @@ export function Slide23() {
 }
 
 /* ============================= SLIDE 23b — EMPIRE REVEAL ================== */
-export function Slide23b() {
-  const playKey = useSlidePlayKey();
-  const [showImage, setShowImage] = useState(false);
-
-  useEffect(() => {
-    setShowImage(false);
-    const t = setTimeout(() => setShowImage(true), 2200);
-    return () => clearTimeout(t);
-  }, [playKey]);
+export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
+  const showBuilding = revealStep >= 1;
 
   return (
     <CssAnimRoot style={{ position: "absolute", inset: 0, width: STAGE.width, height: STAGE.height }}>
@@ -260,22 +248,41 @@ export function Slide23b() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: showBuilding ? "flex-start" : "center",
           padding: "72px 90px 84px",
           gap: 28,
         }}
       >
         <div className="gv-reveal" style={{ ["--gv-i" as string]: 0, textAlign: "center", flexShrink: 0 }}>
-          <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
-          <Title size={96} style={{ marginTop: 18 }}>
-            <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
+          <Title size={96}>
+            Radikal bir yenileme kararı{" "}
+            <Grad from={colors.blueSoft} to={colors.greenNeon}>alındı</Grad>
           </Title>
         </div>
 
-        {showImage && (
+        <RevealBlock
+          revealStep={revealStep}
+          style={{
+            ["--gv-i" as string]: 1,
+            flex: 1,
+            width: "100%",
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 28,
+            textAlign: "center",
+          }}
+        >
+          <div style={{ flexShrink: 0 }}>
+            <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
+            <Title size={72} style={{ marginTop: 18 }}>
+              <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
+            </Title>
+          </div>
+
           <div
-            className="gv-reveal"
             style={{
-              ["--gv-i" as string]: 2,
               flex: 1,
               width: "100%",
               minHeight: 0,
@@ -313,7 +320,7 @@ export function Slide23b() {
               />
             </div>
           </div>
-        )}
+        </RevealBlock>
       </div>
     </CssAnimRoot>
   );

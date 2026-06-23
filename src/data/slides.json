@@ -190,8 +190,8 @@
   },
   {
     "id": 22,
-    "title": "Enerji canavarından yeşil değere.",
-    "subtitle": "Empire State Building — radikal bir yenileme kararı.",
+    "title": "Enerji canavarından yeşil dönüşüme",
+    "subtitle": "Radikal bir yenileme kararı.",
     "visualDirection": "Empire State Building etkileyici gece görseli; karanlık overlay ile bütünleşsin.",
     "chartType": "none",
     "animationDirection": "Bina görseli sinematik fade-in; başlık ışıkla gelsin.",
@@ -200,7 +200,7 @@
   {
     "id": 23,
     "title": "Sürdürülebilirlik, en kârlı yatırım.",
-    "subtitle": "Empire State — 3 yılda kendini amorti etti.",
+    "subtitle": "3 yılda kendini amorti etti.",
     "visualDirection": "KPI'lar + payback timeline: 6.514 cam, %96 yeniden kullanım, 13M$ yatırım, 4.4M$ yıllık tasarruf, 3 yıl amorti, %38 tasarruf.",
     "chartType": "payback-timeline",
     "animationDirection": "Timeline çizgisi aksın; sayılar count-up ile gelsin.",
@@ -208,11 +208,11 @@
   },
   {
     "id": 24,
-    "title": "Empire State Building",
-    "subtitle": "Gündüzden geceye — ikonik bir yeşil dönüşüm.",
-    "visualDirection": "Bina adı animasyonla belirir; ardından üçlü Empire State görseli (gündüz / gün batımı / gece) sinematik fade-in.",
+    "title": "Radikal bir yenileme kararı alındı",
+    "subtitle": "Empire State Building — gündüzden geceye ikonik yeşil dönüşüm.",
+    "visualDirection": "İlk görünüm: başlık; tıkla: bina adı + üçlü Empire State görseli (gündüz / gün batımı / gece).",
     "chartType": "none",
-    "animationDirection": "Önce isim, 2 sn sonra görsel.",
+    "animationDirection": "Reveal: önce karar başlığı, sonra isim + triptych.",
     "speakerNotes": "Dünyanın en ikonik yapılarından biri: Empire State Building. Radikal yenileme kararıyla enerji canavarından yeşil değere dönüştü."
   },
   {

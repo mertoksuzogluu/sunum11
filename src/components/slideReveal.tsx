@@ -41,7 +41,7 @@ export const REVEAL_STEPS: readonly number[] = [
   0, // 08 (07 skipped in deck)
   0, // 09
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 10–18
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 19–27 (+23b, 24b)
+  0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, // 19–27 (+23b reveal, 24b)
 ];
 
 export function revealMaxForIndex(index: number) {
