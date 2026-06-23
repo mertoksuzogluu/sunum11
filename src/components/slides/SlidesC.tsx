@@ -284,26 +284,48 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
             style={{
               ["--gv-i" as string]: 1,
               width: "100%",
-              flex: 1,
-              display: "grid",
-              gridTemplateRows: "auto minmax(480px, 1fr)",
-              gap: 28,
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 32,
               textAlign: "center",
-              minHeight: 0,
             }}
           >
-            <div>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                width: "100%",
+              }}
+            >
               <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
-              <Title size={72} style={{ marginTop: 18 }}>
+              <h1
+                style={{
+                  fontFamily: font.heading,
+                  fontWeight: 700,
+                  fontSize: 72,
+                  lineHeight: 1.08,
+                  letterSpacing: "-0.025em",
+                  color: colors.iceWhite,
+                  margin: "18px 0 0",
+                  padding: 0,
+                  width: "100%",
+                  textAlign: "center",
+                }}
+              >
                 <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
-              </Title>
+              </h1>
             </div>
 
             <div
               style={{
                 width: "100%",
                 maxWidth: 1680,
-                margin: "0 auto",
+                flex: "0 1 auto",
                 borderRadius: 24,
                 overflow: "hidden",
                 boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
@@ -312,7 +334,7 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
                 alignItems: "center",
                 justifyContent: "center",
                 padding: 12,
-                minHeight: 480,
+                maxHeight: "58vh",
               }}
             >
               <img
