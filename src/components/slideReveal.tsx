@@ -9,7 +9,10 @@ export type SlideRevealProps = {
   revealStep?: number;
 };
 
-/** Animated block shown after a reveal click on the current slide. */
+/**
+ * Reveal slot — always mounted so sibling order stays stable (no React remount
+ * cascade). Hidden via opacity/max-height until the reveal step is reached.
+ */
 export function RevealBlock({
   revealStep: revealStepProp,
   requiredStep = 1,
@@ -22,9 +25,26 @@ export function RevealBlock({
   children: ReactNode;
 }) {
   const revealStep = useRevealStep(revealStepProp);
-  if (revealStep < requiredStep) return null;
+  const visible = revealStep >= requiredStep;
+  const { marginBottom, marginTop, ...restStyle } = style ?? {};
+
   return (
-    <div className="gv-reveal" style={style}>
+    <div
+      data-reveal-slot
+      aria-hidden={!visible}
+      style={{
+        ...restStyle,
+        marginTop,
+        marginBottom: visible ? marginBottom : 0,
+        maxHeight: visible ? 900 : 0,
+        opacity: visible ? 1 : 0,
+        overflow: "hidden",
+        transition: visible
+          ? "opacity 0.75s cubic-bezier(0.22, 1, 0.36, 1), max-height 0.5s ease"
+          : undefined,
+        pointerEvents: visible ? "auto" : "none",
+      }}
+    >
       {children}
     </div>
   );

@@ -38,7 +38,6 @@ export default function SlideShell({
     <div style={{ position: "absolute", inset: 0, width: STAGE.width, height: STAGE.height, overflow: "hidden" }}>
       {showBg && <StageBackground variant={bg} />}
       <div
-        key={playKey}
         ref={contentRef}
         style={{
           position: "relative",

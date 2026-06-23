@@ -203,10 +203,9 @@ function CityCore() {
 
 /* ============================= SLIDE 2 — THE QUESTION ======================= */
 export function Slide02({ revealStep = 0 }: SlideRevealProps) {
-  const showAnswer = revealStep >= 1;
   const options = ["Müteahhit mi?", "Yatırımcı mı?", "Banka mı?"];
   return (
-    <SlideShell>
+    <SlideShell align="flex-start">
       <Kicker>Oyunun sorusu</Kicker>
       <Title size={104} style={{ marginTop: 26, maxWidth: 1500 }}>
         Gayrimenkulde gerçek <Grad>patron</Grad> kim?
@@ -236,13 +235,8 @@ export function Slide02({ revealStep = 0 }: SlideRevealProps) {
         ))}
       </div>
 
-      {showAnswer && (
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: ease.out }}
-          style={{ marginTop: 64, display: "flex", justifyContent: "center" }}
-        >
+      <RevealBlock revealStep={revealStep} style={{ marginTop: "auto", paddingTop: 64 }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <div
             style={{
               padding: "44px 80px",
@@ -258,8 +252,8 @@ export function Slide02({ revealStep = 0 }: SlideRevealProps) {
           >
             Yoksa <Grad from={colors.green} to={colors.greenNeon}>son kullanıcı</Grad> mı?
           </div>
-        </motion.div>
-      )}
+        </div>
+      </RevealBlock>
     </SlideShell>
   );
 }
@@ -313,14 +307,14 @@ export function Slide04({ revealStep = 0 }: SlideRevealProps) {
   return (
     <SlideShell align="flex-start">
       <RevealBlock revealStep={revealStep} style={{ marginBottom: 40 }}>
-        <Kicker>Dönem 1</Kicker>
-        <Title size={108} style={{ marginTop: 26 }}>
+        <Kicker noAnim>Dönem 1</Kicker>
+        <Title noAnim size={108} style={{ marginTop: 26 }}>
           Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
         </Title>
       </RevealBlock>
 
-      <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>
-      <div style={{ marginTop: 50, maxWidth: 1600 }}>
+      <Kicker key="ford-kicker" color={colors.softGray}>1909 · Henry Ford</Kicker>
+      <div key="ford-quote" style={{ marginTop: 50, maxWidth: 1600 }}>
         <span
           style={{
             fontFamily: font.heading,
@@ -375,7 +369,6 @@ function useTypewriter(full: string, startDelay: number, cps: number, playKey: n
 
 /* ============================= SLIDE 5 — SATABİLECEĞİMİ ÜRETİRİM =========== */
 export function Slide05({ revealStep = 0 }: SlideRevealProps) {
-  const showTitle = revealStep >= 1;
   const bubbles: { label: string; side: "left" | "right"; top: number; order: number }[] = [
     { label: "Konum", side: "left", top: 20, order: 0 },
     { label: "Kat", side: "left", top: 230, order: 2 },
@@ -387,13 +380,13 @@ export function Slide05({ revealStep = 0 }: SlideRevealProps) {
   return (
     <SlideShell align="flex-start">
       <RevealBlock revealStep={revealStep} style={{ marginBottom: 40 }}>
-        <Kicker>Dönem 2</Kicker>
-        <Title size={104} style={{ marginTop: 24 }}>
+        <Kicker noAnim>Dönem 2</Kicker>
+        <Title noAnim size={104} style={{ marginTop: 24 }}>
           Satabileceğimi <Grad>üretirim.</Grad>
         </Title>
       </RevealBlock>
 
-      <div style={{ position: "relative", marginTop: showTitle ? 0 : 24, height: 560 }}>
+      <div key="parkroyal-stage" style={{ position: "relative", marginTop: 24, height: 560 }}>
         <motion.div variants={scaleIn} style={{ position: "absolute", left: 470, right: 470, top: 0, bottom: 0 }}>
           <ImageSlot
             asset="asset: parkroyal-pickering.jpg"
@@ -432,12 +425,12 @@ export function Slide06({ revealStep = 0 }: SlideRevealProps) {
         <div>
           <Kicker>Dönem 3</Kicker>
           <RevealBlock revealStep={revealStep}>
-            <Title size={88} style={{ marginTop: 26 }}>
+            <Title noAnim size={88} style={{ marginTop: 26 }}>
               Finansın kuralına uyan <Grad>ürünü</Grad> üretirim.
             </Title>
-            <Support style={{ marginTop: 34 }}>Arzı ve talebi buluşturan köprü artık finans kurumları.</Support>
+            <Support noAnim style={{ marginTop: 34 }}>Arzı ve talebi buluşturan köprü artık finans kurumları.</Support>
           </RevealBlock>
-          <motion.div variants={fadeUp} style={{ marginTop: 40 }}>
+          <motion.div key="family-image" variants={fadeUp} style={{ marginTop: 40 }}>
             <ImageSlot
               asset="asset: turkish-young-family.jpg"
               src={youngFamilyDreaming}

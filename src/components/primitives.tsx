@@ -12,10 +12,18 @@ import { useReplayKey } from "./useMotionReady";
 /* ------------------------------------------------------------------ *
  * Kicker — small uppercase eyebrow label with a neon tick
  * ------------------------------------------------------------------ */
-export function Kicker({ children, color = colors.greenNeon }: { children: ReactNode; color?: string }) {
+export function Kicker({
+  children,
+  color = colors.greenNeon,
+  noAnim = false,
+}: {
+  children: ReactNode;
+  color?: string;
+  noAnim?: boolean;
+}) {
   return (
     <div
-      className="gv-reveal"
+      className={noAnim ? undefined : "gv-reveal"}
       style={{
         ["--gv-i" as string]: 0,
         display: "inline-flex",
@@ -43,15 +51,17 @@ export function Title({
   size = 96,
   max = 1500,
   style,
+  noAnim = false,
 }: {
   children: ReactNode;
   size?: number;
   max?: number;
   style?: CSSProperties;
+  noAnim?: boolean;
 }) {
   return (
     <h1
-      className="gv-reveal"
+      className={noAnim ? undefined : "gv-reveal"}
       style={{
         ["--gv-i" as string]: 1,
         fontFamily: font.heading,
@@ -97,10 +107,10 @@ export function Grad({
 /* ------------------------------------------------------------------ *
  * Support — single short supporting sentence under the title.
  * ------------------------------------------------------------------ */
-export function Support({ children, style }: { children: ReactNode; style?: CSSProperties }) {
+export function Support({ children, style, noAnim = false }: { children: ReactNode; style?: CSSProperties; noAnim?: boolean }) {
   return (
     <p
-      className="gv-reveal"
+      className={noAnim ? undefined : "gv-reveal"}
       style={{
         ["--gv-i" as string]: 2,
         fontFamily: font.body,
