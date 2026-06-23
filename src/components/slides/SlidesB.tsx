@@ -300,6 +300,77 @@ function CountUpInline(props: React.ComponentProps<typeof CountUp>) {
   return <CountUp {...props} />;
 }
 
+/* ============================= SLIDE 14b — GBCSA / MSCI GÜNEY AFRIKA ========= */
+export function Slide14b() {
+  return (
+    <SlideShell pad={120}>
+      <Kicker>Global veri · Güney Afrika</Kicker>
+      <Title size={76} style={{ marginTop: 20, maxWidth: 1680 }}>
+        MSCI & GBCSA: <Grad>10 yıllık</Grad> yeşil ofis performansı
+      </Title>
+      <Support style={{ marginTop: 28, fontSize: 30, maxWidth: 1500 }}>
+        Güney Afrika Yeşil Bina Konseyi endeksleme çalışmasına göre —{" "}
+        <span style={{ color: colors.greenNeon, fontWeight: 600 }}>2025</span> yılı sonuçları:
+      </Support>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 32, marginTop: 64 }}>
+        <MetricBenefitCard value={7} direction="down" label="daha düşük işletme maliyeti" delay={0.45} />
+        <MetricBenefitCard value={3} direction="down" label="daha düşük boşluk oranı" delay={0.65} />
+        <MetricBenefitCard value={34} direction="up" label="M² başına daha yüksek brüt gelir" delay={0.85} emphasis />
+      </div>
+
+      <div
+        className="gv-reveal"
+        style={{
+          ["--gv-delay" as string]: "1.3s",
+          marginTop: 48,
+          fontFamily: font.body,
+          fontSize: 14,
+          color: "rgba(170,183,200,0.32)",
+          lineHeight: 1.5,
+        }}
+      >
+        gbcsa.org.za/news/msci-green-annual-property-index-2025-confirms-a-decade-of-outperformance-by-green-certified-offices
+      </div>
+    </SlideShell>
+  );
+}
+
+function MetricBenefitCard({
+  value,
+  direction,
+  label,
+  delay,
+  emphasis = false,
+}: {
+  value: number;
+  direction: "up" | "down";
+  label: string;
+  delay: number;
+  emphasis?: boolean;
+}) {
+  const c = colors.greenNeon;
+  return (
+    <div className="gv-reveal" style={{ ["--gv-delay" as string]: `${delay}s` }}>
+      <GlassCard
+        glow={emphasis ? "rgba(35,209,139,0.3)" : "rgba(35,209,139,0.18)"}
+        border={emphasis ? "rgba(124,255,178,0.45)" : "rgba(124,255,178,0.28)"}
+        style={{ padding: "48px 44px", textAlign: "center", height: "100%" }}
+      >
+        <div style={{ display: "flex", justifyContent: "center", marginBottom: 12 }}>
+          <TrendArrow direction={direction} height={88} delay={delay + 0.15} color={c} />
+        </div>
+        <div style={{ fontFamily: font.heading, fontWeight: 700, fontSize: emphasis ? 120 : 108, color: c, lineHeight: 1, textShadow: `0 0 40px ${colors.green}55` }}>
+          <CountUpInline to={value} suffix="%" delay={delay + 0.2} />
+        </div>
+        <div style={{ fontFamily: font.heading, fontWeight: 600, fontSize: 30, color: colors.iceWhite, marginTop: 22, lineHeight: 1.25 }}>
+          {label}
+        </div>
+      </GlassCard>
+    </div>
+  );
+}
+
 /* ============================= SLIDE 15 — TÜRKİYE KPI ====================== */
 export function Slide15() {
   return (

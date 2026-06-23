@@ -420,6 +420,90 @@ export function Slide24() {
   );
 }
 
+/* ============================= SLIDE 24b — MORGAN STANLEY ANKETİ ======== */
+export function Slide24b() {
+  const regions = [
+    { label: "Kuzey Amerika", value: 90, delay: 0.7 },
+    { label: "Asya", value: 85, delay: 0.9 },
+    { label: "Avrupa", value: 82, delay: 1.1 },
+  ];
+
+  return (
+    <SlideShell pad={120}>
+      <Kicker>Kurumsal yatırımcı sinyali</Kicker>
+      <Title size={80} style={{ marginTop: 20, maxWidth: 1620 }}>
+        Morgan Stanley: <Grad>900 kurumsal</Grad> katılımcı ne diyor?
+      </Title>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1.05fr 0.95fr", gap: 70, marginTop: 56, alignItems: "stretch" }}>
+        <div>
+          <Support style={{ fontSize: 32, maxWidth: 820, lineHeight: 1.45 }}>
+            Önümüzdeki <b style={{ color: colors.greenNeon }}>2 yıl</b> içinde varlıklarının büyük kısmını sürdürülebilir stratejilere ayıracaklarını
+            belirtiyorlar.
+          </Support>
+          <div
+            className="gv-reveal"
+            style={{
+              ["--gv-delay" as string]: "0.55s",
+              marginTop: 36,
+              padding: "28px 34px",
+              borderRadius: 18,
+              background: "linear-gradient(150deg, rgba(35,209,139,0.12), rgba(7,20,42,0.55))",
+              border: "1px solid rgba(124,255,178,0.28)",
+              fontFamily: font.body,
+              fontSize: 26,
+              color: colors.softGray,
+              lineHeight: 1.5,
+            }}
+          >
+            Bu kaynağın önemli bir kısmı <span style={{ color: colors.iceWhite, fontWeight: 600 }}>yeşil gayrimenkule</span> yönelecek.
+          </div>
+        </div>
+
+        <GlassCard glow="rgba(35,209,139,0.22)" border="rgba(124,255,178,0.32)" style={{ padding: "40px 44px" }}>
+          <div style={{ fontFamily: font.body, fontSize: 20, letterSpacing: "0.18em", textTransform: "uppercase", color: colors.softGray, marginBottom: 28 }}>
+            Katılımcı profili
+          </div>
+          {regions.map((r) => (
+            <div key={r.label} className="gv-reveal" style={{ ["--gv-delay" as string]: `${r.delay}s`, marginBottom: 28 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 10, fontFamily: font.heading, fontSize: 28, color: colors.iceWhite }}>
+                <span>{r.label}</span>
+                <span style={{ color: colors.greenNeon, fontWeight: 700 }}>%{r.value}</span>
+              </div>
+              <div style={{ height: 12, borderRadius: 999, background: "rgba(124,180,255,0.12)", overflow: "hidden" }}>
+                <div
+                  className="gv-chart-bar"
+                  style={{
+                    ["--gv-delay" as string]: `${r.delay + 0.1}s`,
+                    height: "100%",
+                    width: `${r.value}%`,
+                    borderRadius: 999,
+                    background: `linear-gradient(90deg, ${colors.blueSoft}, ${colors.greenNeon})`,
+                    boxShadow: `0 0 20px -4px ${colors.greenNeon}`,
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </GlassCard>
+      </div>
+
+      <div
+        className="gv-reveal"
+        style={{
+          ["--gv-delay" as string]: "1.4s",
+          marginTop: 40,
+          fontFamily: font.body,
+          fontSize: 14,
+          color: "rgba(170,183,200,0.32)",
+        }}
+      >
+        morganstanley.com/insights/articles/institutional-investor-sustainability-signals-report-2025
+      </div>
+    </SlideShell>
+  );
+}
+
 /* ============================= SLIDE 25 — HAYAT KALİTESİ ================== */
 export function Slide25() {
   const concepts = [
