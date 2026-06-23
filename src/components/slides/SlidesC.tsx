@@ -246,37 +246,41 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
           position: "relative",
           height: "100%",
           padding: "72px 90px 84px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: showBuilding ? "flex-start" : "center",
         }}
       >
-        <div
-          className="gv-reveal"
-          style={{
-            ["--gv-i" as string]: 0,
-            textAlign: "center",
-            position: showBuilding ? "relative" : "absolute",
-            left: showBuilding ? undefined : 0,
-            right: showBuilding ? undefined : 0,
-            top: showBuilding ? undefined : "50%",
-            transform: showBuilding ? undefined : "translateY(-50%)",
-          }}
-        >
-          <Title size={96}>
-            Radikal bir yenileme kararı{" "}
-            <Grad from={colors.blueSoft} to={colors.greenNeon}>alındı</Grad>
-          </Title>
-        </div>
+        {!showBuilding && (
+          <div
+            className="gv-reveal"
+            style={{
+              ["--gv-i" as string]: 0,
+              textAlign: "center",
+              maxWidth: 1400,
+            }}
+          >
+            <Title size={96} style={{ lineHeight: 1.12 }}>
+              Radikal bir yenileme
+              <br />
+              <Grad from={colors.blueSoft} to={colors.greenNeon}>kararı alındı</Grad>
+            </Title>
+          </div>
+        )}
 
         {showBuilding && (
           <div
             className="gv-reveal"
             style={{
               ["--gv-i" as string]: 1,
-              marginTop: 36,
+              width: "100%",
+              flex: 1,
               display: "grid",
               gridTemplateRows: "auto minmax(480px, 1fr)",
               gap: 28,
-              height: "calc(100% - 120px)",
               textAlign: "center",
+              minHeight: 0,
             }}
           >
             <div>
