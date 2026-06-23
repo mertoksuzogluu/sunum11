@@ -315,48 +315,46 @@ export function Slide04() {
 
   return (
     <SlideShell>
-      {!showTitle ? (
-        <>
-          <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>
-          <div style={{ marginTop: 50, maxWidth: 1600 }}>
-            <span
-              style={{
-                fontFamily: font.heading,
-                fontWeight: 600,
-                fontSize: 92,
-                lineHeight: 1.15,
-                color: colors.iceWhite,
-                whiteSpace: "pre-line",
-              }}
-            >
-              “{text}
-              {!quoteDone && (
-                <motion.span
-                  animate={{ opacity: [1, 0] }}
-                  transition={{ duration: 0.6, repeat: Infinity }}
-                  style={{ color: colors.greenNeon }}
-                >
-                  |
-                </motion.span>
-              )}
-              ”
-            </span>
-          </div>
-        </>
-      ) : (
+      {showTitle && (
         <motion.div
-          initial={{ opacity: 0, y: 28 }}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: ease.out }}
-          style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%" }}
+          style={{ marginBottom: 48 }}
         >
           <Kicker>Dönem 1</Kicker>
           <Title size={108} style={{ marginTop: 26 }}>
             Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
           </Title>
-          <Support style={{ marginTop: 36, fontSize: 40 }}>Talep yüksek, üretim sınırlıydı.</Support>
         </motion.div>
       )}
+
+      {!showTitle && <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>}
+      <div style={{ marginTop: showTitle ? 0 : 50, maxWidth: 1600 }}>
+        <span
+          style={{
+            fontFamily: font.heading,
+            fontWeight: 600,
+            fontSize: showTitle ? 64 : 92,
+            lineHeight: 1.15,
+            color: showTitle ? colors.softGray : colors.iceWhite,
+            whiteSpace: "pre-line",
+            transition: "color 0.5s ease, font-size 0.5s ease",
+          }}
+        >
+          “{text}
+          {!quoteDone && (
+            <motion.span
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 0.6, repeat: Infinity }}
+              style={{ color: colors.greenNeon }}
+            >
+              |
+            </motion.span>
+          )}
+          ”
+        </span>
+      </div>
     </SlideShell>
   );
 }
