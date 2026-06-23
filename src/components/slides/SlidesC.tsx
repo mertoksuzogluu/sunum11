@@ -260,14 +260,13 @@ export function Slide23b() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          padding: "80px 120px",
-          gap: 48,
+          padding: "72px 90px 84px",
+          gap: 28,
         }}
       >
-        <div className="gv-reveal" style={{ ["--gv-i" as string]: 0, textAlign: "center" }}>
+        <div className="gv-reveal" style={{ ["--gv-i" as string]: 0, textAlign: "center", flexShrink: 0 }}>
           <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
-          <Title size={118} style={{ marginTop: 24 }}>
+          <Title size={96} style={{ marginTop: 18 }}>
             <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
           </Title>
         </div>
@@ -277,18 +276,42 @@ export function Slide23b() {
             className="gv-reveal"
             style={{
               ["--gv-i" as string]: 2,
+              flex: 1,
               width: "100%",
-              maxWidth: 1180,
-              borderRadius: 24,
-              overflow: "hidden",
-              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
+              minHeight: 0,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
             }}
           >
-            <img
-              src={empireStateTriptych}
-              alt="Empire State Building — gündüz, gün batımı ve gece"
-              style={{ width: "100%", height: 520, objectFit: "cover", display: "block" }}
-            />
+            <div
+              style={{
+                width: "100%",
+                maxWidth: 1680,
+                height: "100%",
+                borderRadius: 24,
+                overflow: "hidden",
+                boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
+                background: "rgba(4,12,28,0.55)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                padding: 12,
+              }}
+            >
+              <img
+                src={empireStateTriptych}
+                alt="Empire State Building — gündüz, gün batımı ve gece"
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                  display: "block",
+                }}
+              />
+            </div>
           </div>
         )}
       </div>

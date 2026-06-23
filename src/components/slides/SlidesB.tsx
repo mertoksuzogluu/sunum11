@@ -8,7 +8,7 @@ import {
   KpiCard,
   FlowDiagram,
 } from "../charts";
-import netherlandsSocialHousing from "../../assets/netherlands-social-housing-retrofit.jpg";
+import netherlandsSocialHousing from "../../assets/netherlands-social-housing-retrofit.png";
 
 /* ============================= SLIDE 10 — 1 HAFTA ========================== */
 export function Slide10() {
@@ -41,9 +41,9 @@ export function Slide10() {
         >
           <BeforeAfterBars before={100} after={26} beforeLabel="Dönüşüm öncesi tüketim" afterLabel="Dönüşüm sonrası tüketim" />
           <ImageSlot
-            asset="asset: netherlands-social-housing-retrofit.jpg"
+            asset="asset: netherlands-social-housing-retrofit.png"
             src={netherlandsSocialHousing}
-            caption="Utrecht, Kanaleneiland · sosyal konut yenilemesi"
+            caption="Utrecht · prefabrik cephe yenilemesi"
             tone="green"
             style={{ height: 220 }}
           />

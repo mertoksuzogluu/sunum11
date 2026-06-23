@@ -9,8 +9,8 @@ import { colors, ease, font } from "../../theme";
 import logo from "../../assets/sasyas-logo-transparent.png";
 import fordModelT from "../../assets/ford-model-t.png";
 import parkroyalPickering from "../../assets/parkroyal-pickering.jpg";
-import youngFamilyDreaming from "../../assets/young-family-dreaming.jpg";
-import netherlandsSocialHousing from "../../assets/netherlands-social-housing-retrofit.jpg";
+import youngFamilyDreaming from "../../assets/turkish-young-family.jpg";
+import netherlandsSocialHousing from "../../assets/netherlands-social-housing-retrofit.png";
 
 /* ============================= SLIDE 1 — OPENING ============================ */
 export function Slide01() {
@@ -439,11 +439,11 @@ export function Slide06({ revealStep = 0 }: SlideRevealProps) {
           </RevealBlock>
           <motion.div variants={fadeUp} style={{ marginTop: 40 }}>
             <ImageSlot
-              asset="asset: young-family-dreaming.jpg"
+              asset="asset: turkish-young-family.jpg"
               src={youngFamilyDreaming}
               caption="Genç Türk ailesi · ev hayali"
               tone="dark"
-              style={{ height: 220, width: 380 }}
+              style={{ height: 240, width: 400 }}
             />
           </motion.div>
         </div>
@@ -700,9 +700,9 @@ export function Slide09() {
 
         <div className="gv-scale-in" style={{ ["--gv-delay" as string]: "0.4s", height: "100%" }}>
           <ImageSlot
-            asset="asset: netherlands-social-housing-retrofit.jpg"
+            asset="asset: netherlands-social-housing-retrofit.png"
             src={netherlandsSocialHousing}
-            caption="Utrecht, Kanaleneiland · sosyal konut yenilemesi"
+            caption="Utrecht · prefabrik cephe yenilemesi ve güneş panelleri"
             tone="green"
             style={{ height: "100%" }}
           />
