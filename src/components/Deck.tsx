@@ -139,7 +139,7 @@ export default function Deck() {
         <SlidePlayContext.Provider value={playEpoch}>
           <div style={{ position: "absolute", inset: 0 }}>
             <div
-              key={`${index}-${playEpoch}`}
+              key={`${index}-${playEpoch}-${revealStep}`}
               className="gv-slide-enter"
               style={{ position: "absolute", inset: 0, zIndex: 1 }}
             >

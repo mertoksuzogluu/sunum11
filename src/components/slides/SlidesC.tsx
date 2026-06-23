@@ -249,27 +249,36 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          justifyContent: showBuilding ? "flex-start" : "center",
+          justifyContent: "center",
         }}
       >
-        {!showBuilding && (
+        {!showBuilding ? (
           <div
             className="gv-reveal"
             style={{
               ["--gv-i" as string]: 0,
+              width: "100%",
               textAlign: "center",
-              maxWidth: 1400,
             }}
           >
-            <Title size={96} style={{ lineHeight: 1.12 }}>
-              Radikal bir yenileme
-              <br />
-              <Grad from={colors.blueSoft} to={colors.greenNeon}>kararı alındı</Grad>
-            </Title>
+            <h1
+              style={{
+                fontFamily: font.heading,
+                fontWeight: 700,
+                fontSize: 96,
+                lineHeight: 1.12,
+                letterSpacing: "-0.025em",
+                color: colors.iceWhite,
+                margin: 0,
+              }}
+            >
+              <span style={{ display: "block" }}>Radikal bir yenileme</span>
+              <span style={{ display: "block" }}>
+                <Grad from={colors.blueSoft} to={colors.greenNeon}>kararı alındı</Grad>
+              </span>
+            </h1>
           </div>
-        )}
-
-        {showBuilding && (
+        ) : (
           <div
             className="gv-reveal"
             style={{
@@ -325,7 +334,6 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
     </CssAnimRoot>
   );
 }
-Slide23b.revealMax = 1;
 
 /* ============================= SLIDE 24 — FİNANSAL ALFABE ================= */
 export function Slide24() {
@@ -443,7 +451,6 @@ export function Slide24() {
     </SlideShell>
   );
 }
-Slide24.revealMax = 0;
 
 /* ============================= SLIDE 24b — MORGAN STANLEY ANKETİ ======== */
 export function Slide24b() {

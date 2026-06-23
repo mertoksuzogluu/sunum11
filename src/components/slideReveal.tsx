@@ -1,6 +1,6 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { useRevealStep } from "./revealContext";
-import { REVEAL_STEPS } from "./deckReveal";
+import { REVEAL_STEPS } from "./slides";
 
 export { REVEAL_STEPS };
 
