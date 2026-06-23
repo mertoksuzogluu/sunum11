@@ -1,8 +1,19 @@
 import { createContext, useContext } from "react";
 
-/** Current reveal sub-step for the active deck index (0 = nothing revealed yet). */
-export const RevealStepContext = createContext(0);
+/** Reveal state for the active slide — object identity bumps on every change. */
+export type RevealSnapshot = {
+  slideIndex: number;
+  step: number;
+  version: number;
+};
 
-export function useRevealStep() {
-  return useContext(RevealStepContext);
+export const RevealStepContext = createContext<RevealSnapshot>({
+  slideIndex: 0,
+  step: 0,
+  version: 0,
+});
+
+export function useRevealStep(explicit?: number) {
+  const snapshot = useContext(RevealStepContext);
+  return explicit ?? snapshot.step;
 }

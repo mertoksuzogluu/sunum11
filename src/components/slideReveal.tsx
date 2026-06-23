@@ -1,9 +1,7 @@
-import { motion } from "framer-motion";
-import type { CSSProperties, ReactNode } from "react";
+import { type CSSProperties, type ReactNode } from "react";
 import { useRevealStep } from "./revealContext";
-import { ease } from "../theme";
 
-/** Optional prop every slide may receive from Deck (context is the source of truth). */
+/** Optional prop every slide may receive from Deck (prop wins over context). */
 export type SlideRevealProps = {
   revealStep?: number;
 };
@@ -20,18 +18,12 @@ export function RevealBlock({
   style?: CSSProperties;
   children: ReactNode;
 }) {
-  const revealStepFromContext = useRevealStep();
-  const revealStep = revealStepProp ?? revealStepFromContext;
+  const revealStep = useRevealStep(revealStepProp);
   if (revealStep < requiredStep) return null;
   return (
-    <motion.div
-      initial={{ opacity: 0, y: -20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.85, ease: ease.out }}
-      style={style}
-    >
+    <div className="gv-reveal" style={style}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 

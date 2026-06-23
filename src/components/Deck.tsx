@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
+import { applyDeckStep, clampDeckIndex, type DeckState } from "./deckNavigation";
 import { RevealStepContext } from "./revealContext";
 import { SlidePlayContext } from "./slideContext";
-import { REVEAL_STEPS, revealMaxForIndex, revealProgressPct } from "./slideReveal";
+import { REVEAL_STEPS, revealProgressPct } from "./slideReveal";
 import slidesData from "../data/slides.json";
 import { colors, ease, font } from "../theme";
 
@@ -22,12 +23,6 @@ function metaForDeckIndex(deckIndex: number): SlideMeta {
   return slidesData[jsonIndex] as SlideMeta;
 }
 
-type DeckState = {
-  index: number;
-  epoch: number;
-  reveals: Record<number, number>;
-};
-
 function hashToIndex(): number {
   const n = parseInt(window.location.hash.replace("#", ""), 10);
   if (Number.isNaN(n)) return 0;
@@ -35,7 +30,7 @@ function hashToIndex(): number {
 }
 
 function clampIndex(n: number) {
-  return Math.max(0, Math.min(TOTAL - 1, n));
+  return clampDeckIndex(n, TOTAL);
 }
 
 function initialDeck(): DeckState {
@@ -47,35 +42,31 @@ export default function Deck() {
   const { index, epoch: playEpoch, reveals } = deck;
   const [notesOpen, setNotesOpen] = useState(false);
   const [fullscreen, setFullscreen] = useState(() => !!document.fullscreenElement);
+  const stepLockUntil = useRef(0);
 
   const revealStep = reveals[index] ?? 0;
   const progressPct = revealProgressPct(index, TOTAL, reveals);
   const Slide = slideComponents[index];
   const meta = metaForDeckIndex(index);
 
-  const step = useCallback((delta: number) => {
-    setDeck((prev) => {
-      const max = revealMaxForIndex(prev.index);
-      const sub = prev.reveals[prev.index] ?? 0;
+  const revealSnapshot = useMemo(
+    () => ({ slideIndex: index, step: revealStep, version: index * 16 + revealStep }),
+    [index, revealStep],
+  );
 
-      if (delta > 0 && sub < max) {
-        return {
-          ...prev,
-          reveals: { ...prev.reveals, [prev.index]: sub + 1 },
-        };
-      }
-      if (delta < 0 && sub > 0) {
-        return {
-          ...prev,
-          reveals: { ...prev.reveals, [prev.index]: sub - 1 },
-        };
-      }
-
-      const next = clampIndex(prev.index + delta);
-      if (next === prev.index) return prev;
-      return { index: next, epoch: prev.epoch + 1, reveals: prev.reveals };
-    });
+  const advance = useCallback((delta: number) => {
+    setDeck((prev) => applyDeckStep(prev, delta, TOTAL));
   }, []);
+
+  const step = useCallback(
+    (delta: number) => {
+      const now = performance.now();
+      if (now < stepLockUntil.current) return;
+      stepLockUntil.current = now + 280;
+      advance(delta);
+    },
+    [advance],
+  );
 
   const go = useCallback((target: number) => {
     setDeck((prev) => {
@@ -117,12 +108,12 @@ export default function Deck() {
         case "PageDown":
         case " ":
           e.preventDefault();
-          step(1);
+          advance(1);
           break;
         case "ArrowLeft":
         case "PageUp":
           e.preventDefault();
-          step(-1);
+          advance(-1);
           break;
         case "Home":
           go(0);
@@ -144,42 +135,39 @@ export default function Deck() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [step, go]);
+  }, [advance, go]);
 
   return (
     <>
       <StageScaler>
-        <RevealStepContext.Provider value={revealStep}>
-          <SlidePlayContext.Provider value={playEpoch}>
-            <div style={{ position: "absolute", inset: 0 }}>
-              <div
-                key={`${index}-${playEpoch}`}
-                className="gv-slide-enter"
-                style={{ position: "absolute", inset: 0, zIndex: 1 }}
-              >
-                <Slide />
-              </div>
-              <Chrome index={index} meta={meta} />
-              <div
-                aria-hidden
-                style={{ position: "absolute", inset: 0, zIndex: 20, cursor: "pointer" }}
-                onPointerDown={(e) => {
-                  if (e.button !== 0) return;
-                  step(1);
-                }}
-                onContextMenu={(e) => {
-                  e.preventDefault();
-                  step(-1);
-                }}
-              />
+        <SlidePlayContext.Provider value={playEpoch}>
+          <div style={{ position: "absolute", inset: 0 }}>
+            <div
+              key={`${index}-${playEpoch}`}
+              className="gv-slide-enter"
+              style={{ position: "absolute", inset: 0, zIndex: 1 }}
+            >
+              <RevealStepContext.Provider value={revealSnapshot}>
+                <Slide revealStep={revealStep} />
+              </RevealStepContext.Provider>
             </div>
-          </SlidePlayContext.Provider>
-        </RevealStepContext.Provider>
+            <Chrome index={index} meta={meta} />
+            <div
+              aria-hidden
+              style={{ position: "absolute", inset: 0, zIndex: 20, cursor: "pointer" }}
+              onClick={() => step(1)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                step(-1);
+              }}
+            />
+          </div>
+        </SlidePlayContext.Provider>
       </StageScaler>
 
       <ProgressBar pct={progressPct} />
       {!fullscreen && (
-        <NavControls index={index} step={step} notesOpen={notesOpen} setNotesOpen={setNotesOpen} />
+        <NavControls index={index} advance={advance} step={step} notesOpen={notesOpen} setNotesOpen={setNotesOpen} />
       )}
       <SpeakerNotes open={notesOpen} meta={meta} index={index} />
     </>
@@ -247,11 +235,13 @@ function ProgressBar({ pct }: { pct: number }) {
 /* ----------------------------- Nav controls ----------------------------- */
 function NavControls({
   index,
+  advance,
   step,
   notesOpen,
   setNotesOpen,
 }: {
   index: number;
+  advance: (delta: number) => void;
   step: (delta: number) => void;
   notesOpen: boolean;
   setNotesOpen: (v: boolean) => void;
@@ -268,7 +258,7 @@ function NavControls({
         opacity: 0.9,
       }}
     >
-      <CtrlButton label="‹" onClick={() => step(-1)} disabled={index === 0} />
+      <CtrlButton label="‹" onClick={() => advance(-1)} disabled={index === 0} />
       <CtrlButton label="›" onClick={() => step(1)} disabled={index === TOTAL - 1} />
       <CtrlButton
         label="Notlar"
