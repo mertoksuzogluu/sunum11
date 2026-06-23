@@ -246,7 +246,7 @@ export function Slide14() {
     <SlideShell>
       <Kicker>Global veri</Kicker>
       <Title size={92} style={{ marginTop: 22 }}>
-        Piyasa yeşili <Grad>zaten fiyatlıyor.</Grad>
+        Piyasa, yeşili <Grad>zaten fiyatlıyor.</Grad>
       </Title>
       <Support style={{ marginTop: 30 }}>ABD'de 20.000 ofis binası incelendi — sonuçlar net.</Support>
 
@@ -546,7 +546,7 @@ export function Slide17() {
 
 /* ============================= SLIDE 18 — KARBON / YAŞAM DÖNGÜSÜ ========== */
 export function Slide18() {
-  const stages = ["Malzeme", "İnşaat", "Kullanım", "Bakım", "Yıkım / yeniden kullanım"];
+  const stages = ["Malzeme", "İnşaat", "Kullanım", "Bakım", "Yıkım"];
   const R = 230;
   const cx = 300;
   const cy = 300;
