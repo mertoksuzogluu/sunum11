@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, type ReactNode } from "react";
+import { createContext, useContext, useLayoutEffect, type ReactNode } from "react";
 
 type SlideRevealCtx = {
   /** How many click-advance steps remain on this slide (0 = next click goes to next slide). */
@@ -21,8 +21,9 @@ export function useRevealVisible(requiredStep = 1) {
 /** Call once on mount to require N click-advances before the deck leaves this slide. */
 export function useRevealSteps(steps: number) {
   const { setRevealSteps } = useContext(SlideRevealContext);
-  useEffect(() => {
+  useLayoutEffect(() => {
     setRevealSteps(steps);
+    return () => setRevealSteps(0);
   }, [steps, setRevealSteps]);
 }
 

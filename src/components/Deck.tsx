@@ -40,7 +40,6 @@ export default function Deck() {
 
   useEffect(() => {
     setRevealSubStep(0);
-    setRevealMaxSteps(0);
   }, [index, playEpoch]);
 
   const step = useCallback((delta: number) => {
@@ -62,6 +61,8 @@ export default function Deck() {
   }, [revealSubStep, revealMaxSteps]);
 
   const go = useCallback((target: number) => {
+    setRevealSubStep(0);
+    setRevealMaxSteps(0);
     setNav((prev) => {
       const next = clampIndex(target);
       if (next === prev.index) return prev;
@@ -72,6 +73,8 @@ export default function Deck() {
   useEffect(() => {
     const onHashChange = () => {
       const next = hashToIndex();
+      setRevealSubStep(0);
+      setRevealMaxSteps(0);
       setNav((prev) => {
         if (next === prev.index) return prev;
         return { index: next, epoch: prev.epoch + 1 };
@@ -132,7 +135,16 @@ export default function Deck() {
       <StageScaler>
         <SlidePlayContext.Provider value={playEpoch}>
           <SlideRevealProvider subStep={revealSubStep} setRevealSteps={setRevealSteps}>
-            <div key={playEpoch} className="gv-slide-enter" style={{ position: "absolute", inset: 0 }}>
+            <div
+              key={playEpoch}
+              className="gv-slide-enter"
+              style={{ position: "absolute", inset: 0, cursor: "pointer" }}
+              onClick={() => step(1)}
+              onContextMenu={(e) => {
+                e.preventDefault();
+                step(-1);
+              }}
+            >
               <Current />
             </div>
 
@@ -142,7 +154,7 @@ export default function Deck() {
       </StageScaler>
 
       <ProgressBar index={index} />
-      <NavControls index={index} go={go} notesOpen={notesOpen} setNotesOpen={setNotesOpen} />
+      <NavControls index={index} step={step} notesOpen={notesOpen} setNotesOpen={setNotesOpen} />
       <SpeakerNotes open={notesOpen} meta={meta} index={index} />
     </>
   );
@@ -203,12 +215,12 @@ function ProgressBar({ index }: { index: number }) {
 /* ----------------------------- Nav controls ----------------------------- */
 function NavControls({
   index,
-  go,
+  step,
   notesOpen,
   setNotesOpen,
 }: {
   index: number;
-  go: (n: number) => void;
+  step: (delta: number) => void;
   notesOpen: boolean;
   setNotesOpen: (v: boolean) => void;
 }) {
@@ -224,8 +236,8 @@ function NavControls({
         opacity: 0.9,
       }}
     >
-      <CtrlButton label="‹" onClick={() => go(index - 1)} disabled={index === 0} />
-      <CtrlButton label="›" onClick={() => go(index + 1)} disabled={index === TOTAL - 1} />
+      <CtrlButton label="‹" onClick={() => step(-1)} disabled={index === 0} />
+      <CtrlButton label="›" onClick={() => step(1)} disabled={index === TOTAL - 1} />
       <CtrlButton
         label="Notlar"
         active={notesOpen}
@@ -251,7 +263,10 @@ function CtrlButton({
 }) {
   return (
     <button
-      onClick={onClick}
+      onClick={(e) => {
+        e.stopPropagation();
+        onClick();
+      }}
       disabled={disabled}
       style={{
         minWidth: wide ? "auto" : 46,
