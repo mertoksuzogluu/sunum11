@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
@@ -34,26 +34,32 @@ export default function Deck() {
   const [revealSubStep, setRevealSubStep] = useState(0);
   const [revealMaxSteps, setRevealMaxSteps] = useState(0);
   const [revealGateOpen, setRevealGateOpen] = useState(true);
+  const revealBySlideRef = useRef<Record<number, number>>({});
 
   const setRevealSteps = useCallback((steps: number) => {
     setRevealMaxSteps(Math.max(0, steps));
   }, []);
 
   useEffect(() => {
-    setRevealSubStep(0);
+    setRevealSubStep(revealBySlideRef.current[index] ?? 0);
     setRevealGateOpen(true);
   }, [index, playEpoch]);
 
   const step = useCallback((delta: number) => {
     if (delta > 0 && !revealGateOpen) return;
     if (delta > 0 && revealSubStep < revealMaxSteps) {
-      setRevealSubStep((s) => s + 1);
+      const next = revealSubStep + 1;
+      revealBySlideRef.current[index] = next;
+      setRevealSubStep(next);
       return;
     }
     if (delta < 0 && revealSubStep > 0) {
-      setRevealSubStep((s) => s - 1);
+      const next = revealSubStep - 1;
+      revealBySlideRef.current[index] = next;
+      setRevealSubStep(next);
       return;
     }
+    revealBySlideRef.current[index] = revealSubStep;
     setRevealSubStep(0);
     setRevealMaxSteps(0);
     setNav((prev) => {
@@ -61,7 +67,7 @@ export default function Deck() {
       if (next === prev.index) return prev;
       return { index: next, epoch: prev.epoch + 1 };
     });
-  }, [revealSubStep, revealMaxSteps, revealGateOpen]);
+  }, [revealSubStep, revealMaxSteps, revealGateOpen, index]);
 
   const go = useCallback((target: number) => {
     setRevealSubStep(0);

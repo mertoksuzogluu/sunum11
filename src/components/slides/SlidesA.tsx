@@ -310,8 +310,10 @@ export function Slide04() {
   const quoteDone = text.length >= full.length;
 
   useRevealSteps(1);
-  useRevealGate(quoteDone);
   const showTitle = useRevealVisible(1);
+  useRevealGate(quoteDone || showTitle);
+
+  const displayQuote = showTitle ? full : text;
 
   return (
     <SlideShell>
@@ -320,7 +322,7 @@ export function Slide04() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: ease.out }}
-          style={{ marginBottom: 48 }}
+          style={{ marginBottom: 56 }}
         >
           <Kicker>Dönem 1</Kicker>
           <Title size={108} style={{ marginTop: 26 }}>
@@ -329,21 +331,20 @@ export function Slide04() {
         </motion.div>
       )}
 
-      {!showTitle && <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>}
-      <div style={{ marginTop: showTitle ? 0 : 50, maxWidth: 1600 }}>
+      <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>
+      <div style={{ marginTop: 50, maxWidth: 1600 }}>
         <span
           style={{
             fontFamily: font.heading,
             fontWeight: 600,
-            fontSize: showTitle ? 64 : 92,
+            fontSize: 92,
             lineHeight: 1.15,
-            color: showTitle ? colors.softGray : colors.iceWhite,
+            color: colors.iceWhite,
             whiteSpace: "pre-line",
-            transition: "color 0.5s ease, font-size 0.5s ease",
           }}
         >
-          “{text}
-          {!quoteDone && (
+          “{displayQuote}
+          {!showTitle && !quoteDone && (
             <motion.span
               animate={{ opacity: [1, 0] }}
               transition={{ duration: 0.6, repeat: Infinity }}
