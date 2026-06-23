@@ -323,9 +323,10 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
 
             <div
               style={{
-                position: "relative",
                 width: "100%",
-                height: 560,
+                maxWidth: 760,
+                margin: "0 auto",
+                aspectRatio: "1080 / 1074",
                 flexShrink: 0,
                 borderRadius: 24,
                 overflow: "hidden",
@@ -336,12 +337,9 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
                 src={empireStateTriptych}
                 alt="Empire State Building — gündüz, gün batımı ve gece"
                 style={{
-                  position: "absolute",
-                  inset: 0,
                   width: "100%",
                   height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "center center",
+                  objectFit: "contain",
                   display: "block",
                 }}
               />
