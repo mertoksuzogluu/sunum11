@@ -3,7 +3,7 @@ import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
-import { SlideRevealProvider, revealMaxForIndex } from "./slideReveal";
+import { SlideRevealProvider, revealMaxForIndex, revealProgressPct } from "./slideReveal";
 import slidesData from "../data/slides.json";
 import { colors, ease, font } from "../theme";
 
@@ -40,7 +40,7 @@ export default function Deck() {
   indexRef.current = index;
 
   const revealSubStep = revealBySlideRef.current[index] ?? 0;
-  const revealMaxSteps = revealMaxForIndex(index);
+  const progressPct = revealProgressPct(index, TOTAL, revealBySlideRef.current);
 
   const step = useCallback((delta: number) => {
     const idx = indexRef.current;
@@ -159,7 +159,7 @@ export default function Deck() {
         </SlidePlayContext.Provider>
       </StageScaler>
 
-      <ProgressBar index={index} revealSubStep={revealSubStep} revealMaxSteps={revealMaxSteps} />
+      <ProgressBar pct={progressPct} />
       {!fullscreen && (
         <NavControls index={index} step={step} notesOpen={notesOpen} setNotesOpen={setNotesOpen} />
       )}
@@ -209,17 +209,7 @@ function Chrome({ index, meta }: { index: number; meta: SlideMeta }) {
 }
 
 /* ----------------------------- Progress bar ----------------------------- */
-function ProgressBar({
-  index,
-  revealSubStep,
-  revealMaxSteps,
-}: {
-  index: number;
-  revealSubStep: number;
-  revealMaxSteps: number;
-}) {
-  const slideProgress = revealMaxSteps > 0 ? revealSubStep / revealMaxSteps : 0;
-  const pct = ((index + slideProgress) / TOTAL) * 100;
+function ProgressBar({ pct }: { pct: number }) {
   return (
     <div style={{ position: "fixed", left: 0, top: 0, right: 0, height: 4, background: "rgba(255,255,255,0.05)", zIndex: 50 }}>
       <motion.div

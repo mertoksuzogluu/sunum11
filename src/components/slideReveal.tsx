@@ -32,3 +32,19 @@ export const REVEAL_STEPS_BY_INDEX: Record<number, number> = {
 export function revealMaxForIndex(index: number) {
   return REVEAL_STEPS_BY_INDEX[index] ?? 0;
 }
+
+const TOTAL_REVEAL_STEPS = Object.values(REVEAL_STEPS_BY_INDEX).reduce((sum, n) => sum + n, 0);
+
+/** Progress across the whole deck — every slide change and reveal click advances the bar. */
+export function revealProgressPct(
+  slideIndex: number,
+  totalSlides: number,
+  revealBySlide: Record<number, number>,
+) {
+  const maxUnits = totalSlides - 1 + TOTAL_REVEAL_STEPS;
+  let units = slideIndex;
+  for (let i = 0; i <= slideIndex; i++) {
+    units += revealBySlide[i] ?? 0;
+  }
+  return (units / maxUnits) * 100;
+}
