@@ -53,16 +53,9 @@ export function revealMaxForIndex(index: number) {
   return REVEAL_STEPS[index] ?? 0;
 }
 
-/** Monotonic progress: current slide index + reveal fraction on this slide only. */
-export function revealProgressPct(
-  slideIndex: number,
-  totalSlides: number,
-  revealBySlide: Record<number, number>,
-) {
-  if (totalSlides <= 1) return 100;
-  const max = REVEAL_STEPS[slideIndex] ?? 0;
-  const sub = revealBySlide[slideIndex] ?? 0;
-  const withinSlide = max > 0 ? Math.min(sub / max, 1) : 0;
-  const position = slideIndex + withinSlide;
-  return Math.min(100, Math.max(0, (position / (totalSlides - 1)) * 100));
+/** Simple 1-based slide position — (slide 4 of 29 ≈ 14%, never hits 100% until last slide). */
+export function revealProgressPct(slideIndex: number, totalSlides: number) {
+  if (totalSlides <= 0) return 0;
+  const safeIndex = Math.max(0, Math.min(slideIndex, totalSlides - 1));
+  return ((safeIndex + 1) / totalSlides) * 100;
 }

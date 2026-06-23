@@ -49,7 +49,7 @@ export default function Deck() {
   indexRef.current = index;
   revealBySlideRef.current = revealBySlide;
 
-  const progressPct = revealProgressPct(index, TOTAL, revealBySlide);
+  const progressPct = revealProgressPct(index, TOTAL);
 
   const step = useCallback((delta: number) => {
     const idx = indexRef.current;
@@ -225,10 +225,14 @@ function ProgressBar({ pct }: { pct: number }) {
   const width = Math.min(100, Math.max(0, pct));
   return (
     <div style={{ position: "fixed", left: 0, top: 0, right: 0, height: 4, background: "rgba(255,255,255,0.05)", zIndex: 50 }}>
-      <motion.div
-        animate={{ width: `${width}%` }}
-        transition={{ duration: 0.35, ease: ease.out }}
-        style={{ height: "100%", background: `linear-gradient(90deg, ${colors.blueSoft}, ${colors.greenNeon})`, boxShadow: `0 0 12px ${colors.greenNeon}` }}
+      <div
+        style={{
+          width: `${width}%`,
+          height: "100%",
+          background: `linear-gradient(90deg, ${colors.blueSoft}, ${colors.greenNeon})`,
+          boxShadow: `0 0 12px ${colors.greenNeon}`,
+          transition: "width 0.35s ease",
+        }}
       />
     </div>
   );
