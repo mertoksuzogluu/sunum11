@@ -199,7 +199,7 @@ export function Slide22() {
           <img
             src={empireStateNight}
             alt="İkonik gökdelen gece görünümü"
-            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
+            style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center 35%", display: "block" }}
           />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, transparent 55%, rgba(3,16,31,0.65) 100%)" }} />
         </div>
@@ -324,28 +324,22 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
             <div
               style={{
                 width: "100%",
-                maxWidth: 1680,
-                flex: "0 1 auto",
+                flex: "1 1 auto",
+                minHeight: 0,
+                maxHeight: 720,
                 borderRadius: 24,
                 overflow: "hidden",
                 boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
-                background: "rgba(4,12,28,0.55)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                padding: 12,
-                maxHeight: "58vh",
               }}
             >
               <img
                 src={empireStateTriptych}
                 alt="Empire State Building — gündüz, gün batımı ve gece"
                 style={{
-                  maxWidth: "100%",
-                  maxHeight: "100%",
-                  width: "auto",
-                  height: "auto",
-                  objectFit: "contain",
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center center",
                   display: "block",
                 }}
               />

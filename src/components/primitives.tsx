@@ -318,6 +318,7 @@ export function ImageSlot({
   style,
   src,
   fit = "cover",
+  objectPosition = "center center",
 }: {
   asset: string;
   caption?: string;
@@ -325,6 +326,7 @@ export function ImageSlot({
   children?: ReactNode;
   style?: CSSProperties;
   fit?: "cover" | "contain";
+  objectPosition?: string;
   /** Drop a real photo in /public/assets and pass e.g. src="/assets/ford.jpg".
    *  The dark overlay + label keep the deck cohesive once imagery is added. */
   src?: string;
@@ -366,7 +368,7 @@ export function ImageSlot({
             width: "100%",
             height: "100%",
             objectFit: fit,
-            objectPosition: "center center",
+            objectPosition,
           }}
         />
       )}

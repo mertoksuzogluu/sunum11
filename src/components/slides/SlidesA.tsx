@@ -697,7 +697,7 @@ export function Slide09() {
             src={netherlandsSocialHousing}
             caption="Utrecht · prefabrik cephe yenilemesi ve güneş panelleri"
             tone="green"
-            fit="contain"
+            objectPosition="center 45%"
             style={{ height: "100%", minHeight: 620 }}
           />
         </div>
