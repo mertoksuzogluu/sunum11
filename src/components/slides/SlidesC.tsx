@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import SlideShell from "../SlideShell";
 import StageBackground from "../StageBackground";
 import { CssAnimRoot } from "../cssAnimRestart";
+import { useSlidePlayKey } from "../slideContext";
 import { Kicker, Title, Grad, Support, GlassCard, TrendArrow } from "../primitives";
 import { colors, ease, font, STAGE } from "../../theme";
 import { PaybackTimeline, KpiCard } from "../charts";
@@ -240,12 +241,14 @@ export function Slide23() {
 
 /* ============================= SLIDE 23b — EMPIRE REVEAL ================== */
 export function Slide23b() {
+  const playKey = useSlidePlayKey();
   const [showImage, setShowImage] = useState(false);
 
   useEffect(() => {
+    setShowImage(false);
     const t = setTimeout(() => setShowImage(true), 2200);
     return () => clearTimeout(t);
-  }, []);
+  }, [playKey]);
 
   return (
     <CssAnimRoot style={{ position: "absolute", inset: 0, width: STAGE.width, height: STAGE.height }}>
@@ -262,31 +265,31 @@ export function Slide23b() {
           gap: 48,
         }}
       >
-        <motion.div
-          initial={{ opacity: 0, y: 36, scale: 0.96 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          transition={{ duration: 1.1, ease: ease.out }}
-          style={{ textAlign: "center" }}
-        >
+        <div className="gv-reveal" style={{ ["--gv-i" as string]: 0, textAlign: "center" }}>
           <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
           <Title size={118} style={{ marginTop: 24 }}>
             <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
           </Title>
-        </motion.div>
+        </div>
 
         {showImage && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.94 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.2, ease: ease.out }}
-            style={{ width: "100%", maxWidth: 1180, borderRadius: 24, overflow: "hidden", boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)" }}
+          <div
+            className="gv-reveal"
+            style={{
+              ["--gv-i" as string]: 2,
+              width: "100%",
+              maxWidth: 1180,
+              borderRadius: 24,
+              overflow: "hidden",
+              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
+            }}
           >
             <img
               src={empireStateTriptych}
               alt="Empire State Building — gündüz, gün batımı ve gece"
               style={{ width: "100%", height: 520, objectFit: "cover", display: "block" }}
             />
-          </motion.div>
+          </div>
         )}
       </div>
     </CssAnimRoot>

@@ -7,6 +7,7 @@ import { RevealStepContext } from "./revealContext";
 import { SlidePlayContext } from "./slideContext";
 import { REVEAL_STEPS, revealProgressPct } from "./slideReveal";
 import slidesData from "../data/slides.json";
+import { metaForDeckIndex } from "./deckMeta";
 import { colors, ease, font } from "../theme";
 
 type SlideMeta = (typeof slidesData)[number];
@@ -17,12 +18,7 @@ if (REVEAL_STEPS.length !== TOTAL) {
   throw new Error(`REVEAL_STEPS (${REVEAL_STEPS.length}) must match slide count (${TOTAL})`);
 }
 
-/** slides.json includes id 7; the deck skips that slide — offset from deck index 6 onward. */
-function metaForDeckIndex(deckIndex: number): SlideMeta {
-  const jsonIndex = deckIndex < 6 ? deckIndex : deckIndex + 1;
-  return slidesData[jsonIndex] as SlideMeta;
-}
-
+/** slides.json includes id 7; the deck skips that slide — see deckMeta.ts for full map. */
 function hashToIndex(): number {
   const n = parseInt(window.location.hash.replace("#", ""), 10);
   if (Number.isNaN(n)) return 0;
