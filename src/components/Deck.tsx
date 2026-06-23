@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
-import { SlideRevealProvider } from "./slideReveal";
+import { SlideRevealProvider, revealMaxForIndex } from "./slideReveal";
 import slidesData from "../data/slides.json";
 import { colors, ease, font } from "../theme";
 
@@ -34,43 +34,29 @@ export default function Deck() {
   const [fullscreen, setFullscreen] = useState(() => !!document.fullscreenElement);
   const [revealSubStep, setRevealSubStep] = useState(0);
   const [revealMaxSteps, setRevealMaxSteps] = useState(0);
-  const [revealGateOpen, setRevealGateOpen] = useState(true);
   const revealBySlideRef = useRef<Record<number, number>>({});
   const revealSubStepRef = useRef(0);
   const revealMaxStepsRef = useRef(0);
-  const revealGateOpenRef = useRef(true);
-  const gateBlockedForwardRef = useRef<(() => void) | null>(null);
   const indexRef = useRef(index);
 
   indexRef.current = index;
   revealSubStepRef.current = revealSubStep;
-  revealGateOpenRef.current = revealGateOpen;
 
-  const registerRevealSteps = useCallback((steps: number) => {
-    const v = Math.max(0, steps);
-    revealMaxStepsRef.current = v;
-    setRevealMaxSteps(v);
-  }, []);
-
-  const registerGateBlockedForward = useCallback((handler: (() => void) | null) => {
-    gateBlockedForwardRef.current = handler;
+  const syncRevealMax = useCallback((idx: number) => {
+    const max = revealMaxForIndex(idx);
+    revealMaxStepsRef.current = max;
+    setRevealMaxSteps(max);
   }, []);
 
   useEffect(() => {
+    syncRevealMax(index);
     const saved = revealBySlideRef.current[index] ?? 0;
     revealSubStepRef.current = saved;
     setRevealSubStep(saved);
-    revealGateOpenRef.current = true;
-    setRevealGateOpen(true);
-  }, [index, playEpoch]);
+  }, [index, playEpoch, syncRevealMax]);
 
   const step = useCallback((delta: number) => {
     const idx = indexRef.current;
-    if (delta > 0 && !revealGateOpenRef.current) {
-      gateBlockedForwardRef.current?.();
-      return;
-    }
-
     const sub = revealSubStepRef.current;
     const max = revealMaxStepsRef.current;
 
@@ -102,8 +88,6 @@ export default function Deck() {
   const go = useCallback((target: number) => {
     revealSubStepRef.current = 0;
     setRevealSubStep(0);
-    revealGateOpenRef.current = true;
-    setRevealGateOpen(true);
     setNav((prev) => {
       const next = clampIndex(target);
       if (next === prev.index) return prev;
@@ -116,8 +100,6 @@ export default function Deck() {
       const next = hashToIndex();
       revealSubStepRef.current = 0;
       setRevealSubStep(0);
-      revealGateOpenRef.current = true;
-      setRevealGateOpen(true);
       setNav((prev) => {
         if (next === prev.index) return prev;
         return { index: next, epoch: prev.epoch + 1 };
@@ -183,15 +165,9 @@ export default function Deck() {
     <>
       <StageScaler>
         <SlidePlayContext.Provider value={playEpoch}>
-          <SlideRevealProvider
-            subStep={revealSubStep}
-            registerRevealSteps={registerRevealSteps}
-            gateOpen={revealGateOpen}
-            setGateOpen={setRevealGateOpen}
-            registerGateBlockedForward={registerGateBlockedForward}
-          >
+          <SlideRevealProvider subStep={revealSubStep}>
             <div
-              key={playEpoch}
+              key={index}
               className="gv-slide-enter"
               style={{ position: "absolute", inset: 0, cursor: "pointer" }}
               onClick={() => step(1)}

@@ -4,7 +4,7 @@ import SlideShell from "../SlideShell";
 import { Kicker, Title, Grad, Support, ImageSlot, Pill, GlassCard } from "../primitives";
 import { fadeUp, fadeIn, scaleIn } from "../motion";
 import { useSlidePlayKey } from "../slideContext";
-import { useRevealSteps, useRevealVisible, useRevealGate } from "../slideReveal";
+import { useRevealVisible } from "../slideReveal";
 import { colors, ease, font } from "../../theme";
 import logo from "../../assets/sasyas-logo-transparent.png";
 import fordModelT from "../../assets/ford-model-t.png";
@@ -203,7 +203,6 @@ function CityCore() {
 
 /* ============================= SLIDE 2 — THE QUESTION ======================= */
 export function Slide02() {
-  useRevealSteps(1);
   const showAnswer = useRevealVisible(1);
   const options = ["Müteahhit mi?", "Yatırımcı mı?", "Banka mı?"];
   return (
@@ -306,15 +305,10 @@ export function Slide03() {
 /* ============================= SLIDE 4 — FORD QUOTE ======================== */
 export function Slide04() {
   const full = "İstediğiniz rengi seçebilirsiniz…\nyeter ki siyah olsun.";
-  const [quoteSkipped, setQuoteSkipped] = useState(false);
   const typed = useTypewriter(full, 0.9, 42);
-  const quoteDone = quoteSkipped || typed.length >= full.length;
-
-  useRevealSteps(1);
   const showTitle = useRevealVisible(1);
-  useRevealGate(quoteDone || showTitle, () => setQuoteSkipped(true));
-
-  const displayQuote = showTitle || quoteSkipped ? full : typed;
+  const displayQuote = showTitle ? full : typed;
+  const quoteDone = showTitle || typed.length >= full.length;
 
   return (
     <SlideShell>
@@ -388,7 +382,6 @@ function useTypewriter(full: string, startDelay: number, cps: number) {
 
 /* ============================= SLIDE 5 — SATABİLECEĞİMİ ÜRETİRİM =========== */
 export function Slide05() {
-  useRevealSteps(1);
   const showTitle = useRevealVisible(1);
   const bubbles: { label: string; side: "left" | "right"; top: number; order: number }[] = [
     { label: "Konum", side: "left", top: 20, order: 0 },
@@ -447,7 +440,6 @@ export function Slide05() {
 
 /* ============================= SLIDE 6 — FİNANSIN KURALI ==================== */
 export function Slide06() {
-  useRevealSteps(1);
   const showTitle = useRevealVisible(1);
   return (
     <SlideShell>

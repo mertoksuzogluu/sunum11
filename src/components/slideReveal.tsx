@@ -1,20 +1,11 @@
-import { createContext, useContext, useLayoutEffect, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 
 type SlideRevealCtx = {
   subStep: number;
-  registerRevealSteps: (steps: number) => void;
-  /** When false, forward clicks are ignored (e.g. while an animation is still running). */
-  gateOpen: boolean;
-  setGateOpen: (open: boolean) => void;
-  registerGateBlockedForward: (handler: (() => void) | null) => void;
 };
 
 export const SlideRevealContext = createContext<SlideRevealCtx>({
   subStep: 0,
-  registerRevealSteps: () => {},
-  gateOpen: true,
-  setGateOpen: () => {},
-  registerGateBlockedForward: () => {},
 });
 
 /** True when `subStep` has reached the registered reveal count. */
@@ -23,45 +14,21 @@ export function useRevealVisible(requiredStep = 1) {
   return subStep >= requiredStep;
 }
 
-/** Call once on mount to require N click-advances before the deck leaves this slide. */
-export function useRevealSteps(steps: number) {
-  const { registerRevealSteps } = useContext(SlideRevealContext);
-  useLayoutEffect(() => {
-    registerRevealSteps(steps);
-    return () => registerRevealSteps(0);
-  }, [steps, registerRevealSteps]);
+export function SlideRevealProvider({ subStep, children }: { subStep: number; children: ReactNode }) {
+  return <SlideRevealContext.Provider value={{ subStep }}>{children}</SlideRevealContext.Provider>;
 }
 
-export function useRevealGate(open: boolean, onBlockedForward?: () => void) {
-  const { setGateOpen, registerGateBlockedForward } = useContext(SlideRevealContext);
-  useLayoutEffect(() => {
-    setGateOpen(open);
-    registerGateBlockedForward(open ? null : (onBlockedForward ?? null));
-    return () => {
-      setGateOpen(true);
-      registerGateBlockedForward(null);
-    };
-  }, [open, onBlockedForward, setGateOpen, registerGateBlockedForward]);
-}
+/**
+ * Deck slide index (0-based) → extra forward clicks required before leaving.
+ * Declared here so registration never races with mount/unmount cleanup.
+ */
+export const REVEAL_STEPS_BY_INDEX: Record<number, number> = {
+  1: 1, // Slide02 — son kullanıcı
+  3: 1, // Slide04 — Ürettiğimi satarım
+  4: 1, // Slide05 — Satabileceğimi üretirim
+  5: 1, // Slide06 — Finansın kuralı
+};
 
-export function SlideRevealProvider({
-  subStep,
-  registerRevealSteps,
-  gateOpen,
-  setGateOpen,
-  registerGateBlockedForward,
-  children,
-}: {
-  subStep: number;
-  registerRevealSteps: (steps: number) => void;
-  gateOpen: boolean;
-  setGateOpen: (open: boolean) => void;
-  registerGateBlockedForward: (handler: (() => void) | null) => void;
-  children: ReactNode;
-}) {
-  return (
-    <SlideRevealContext.Provider value={{ subStep, registerRevealSteps, gateOpen, setGateOpen, registerGateBlockedForward }}>
-      {children}
-    </SlideRevealContext.Provider>
-  );
+export function revealMaxForIndex(index: number) {
+  return REVEAL_STEPS_BY_INDEX[index] ?? 0;
 }
