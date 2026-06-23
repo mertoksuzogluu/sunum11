@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
@@ -32,15 +32,15 @@ export default function Deck() {
   const { index, epoch: playEpoch } = nav;
   const [notesOpen, setNotesOpen] = useState(false);
   const [fullscreen, setFullscreen] = useState(() => !!document.fullscreenElement);
-  const [, bumpReveal] = useReducer((n: number) => n + 1, 0);
-  /** Per slide index — single source of truth for reveal progress. */
+  const [revealBySlide, setRevealBySlide] = useState<Record<number, number>>({});
   const revealBySlideRef = useRef<Record<number, number>>({});
   const indexRef = useRef(index);
 
   indexRef.current = index;
+  revealBySlideRef.current = revealBySlide;
 
-  const revealSubStep = revealBySlideRef.current[index] ?? 0;
-  const progressPct = revealProgressPct(index, TOTAL, revealBySlideRef.current);
+  const revealSubStep = revealBySlide[index] ?? 0;
+  const progressPct = revealProgressPct(index, TOTAL, revealBySlide);
 
   const step = useCallback((delta: number) => {
     const idx = indexRef.current;
@@ -48,13 +48,15 @@ export default function Deck() {
     const sub = revealBySlideRef.current[idx] ?? 0;
 
     if (delta > 0 && sub < max) {
-      revealBySlideRef.current[idx] = sub + 1;
-      bumpReveal();
+      const next = { ...revealBySlideRef.current, [idx]: sub + 1 };
+      revealBySlideRef.current = next;
+      setRevealBySlide(next);
       return;
     }
     if (delta < 0 && sub > 0) {
-      revealBySlideRef.current[idx] = sub - 1;
-      bumpReveal();
+      const next = { ...revealBySlideRef.current, [idx]: sub - 1 };
+      revealBySlideRef.current = next;
+      setRevealBySlide(next);
       return;
     }
 
@@ -141,21 +143,24 @@ export default function Deck() {
     <>
       <StageScaler>
         <SlidePlayContext.Provider value={playEpoch}>
-          <SlideRevealProvider subStep={revealSubStep}>
+          <div style={{ position: "absolute", inset: 0 }}>
+            <div key={index} className="gv-slide-enter" style={{ position: "absolute", inset: 0, zIndex: 1 }}>
+              <SlideRevealProvider subStep={revealSubStep}>
+                <Current />
+              </SlideRevealProvider>
+            </div>
+            <Chrome index={index} meta={meta} />
+            {/* Full-stage click target — sits above slide content so nothing blocks navigation */}
             <div
-              style={{ position: "absolute", inset: 0, cursor: "pointer" }}
+              aria-hidden
+              style={{ position: "absolute", inset: 0, zIndex: 20, cursor: "pointer" }}
               onClick={() => step(1)}
               onContextMenu={(e) => {
                 e.preventDefault();
                 step(-1);
               }}
-            >
-              <div key={index} className="gv-slide-enter" style={{ position: "absolute", inset: 0 }}>
-                <Current />
-              </div>
-              <Chrome index={index} meta={meta} />
-            </div>
-          </SlideRevealProvider>
+            />
+          </div>
         </SlidePlayContext.Provider>
       </StageScaler>
 
@@ -213,6 +218,7 @@ function ProgressBar({ pct }: { pct: number }) {
   return (
     <div style={{ position: "fixed", left: 0, top: 0, right: 0, height: 4, background: "rgba(255,255,255,0.05)", zIndex: 50 }}>
       <motion.div
+        key={Math.round(pct * 10)}
         animate={{ width: `${pct}%` }}
         transition={{ duration: 0.35, ease: ease.out }}
         style={{ height: "100%", background: `linear-gradient(90deg, ${colors.blueSoft}, ${colors.greenNeon})`, boxShadow: `0 0 12px ${colors.greenNeon}` }}
