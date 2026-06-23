@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
@@ -32,52 +32,32 @@ export default function Deck() {
   const { index, epoch: playEpoch } = nav;
   const [notesOpen, setNotesOpen] = useState(false);
   const [fullscreen, setFullscreen] = useState(() => !!document.fullscreenElement);
-  const [revealSubStep, setRevealSubStep] = useState(0);
-  const [revealMaxSteps, setRevealMaxSteps] = useState(0);
+  const [, bumpReveal] = useReducer((n: number) => n + 1, 0);
+  /** Per slide index — single source of truth for reveal progress. */
   const revealBySlideRef = useRef<Record<number, number>>({});
-  const revealSubStepRef = useRef(0);
-  const revealMaxStepsRef = useRef(0);
   const indexRef = useRef(index);
 
   indexRef.current = index;
-  revealSubStepRef.current = revealSubStep;
 
-  const syncRevealMax = useCallback((idx: number) => {
-    const max = revealMaxForIndex(idx);
-    revealMaxStepsRef.current = max;
-    setRevealMaxSteps(max);
-  }, []);
-
-  useEffect(() => {
-    syncRevealMax(index);
-    const saved = revealBySlideRef.current[index] ?? 0;
-    revealSubStepRef.current = saved;
-    setRevealSubStep(saved);
-  }, [index, playEpoch, syncRevealMax]);
+  const revealSubStep = revealBySlideRef.current[index] ?? 0;
+  const revealMaxSteps = revealMaxForIndex(index);
 
   const step = useCallback((delta: number) => {
     const idx = indexRef.current;
-    const sub = revealSubStepRef.current;
-    const max = revealMaxStepsRef.current;
+    const max = revealMaxForIndex(idx);
+    const sub = revealBySlideRef.current[idx] ?? 0;
 
     if (delta > 0 && sub < max) {
-      const next = sub + 1;
-      revealSubStepRef.current = next;
-      revealBySlideRef.current[idx] = next;
-      setRevealSubStep(next);
+      revealBySlideRef.current[idx] = sub + 1;
+      bumpReveal();
       return;
     }
     if (delta < 0 && sub > 0) {
-      const next = sub - 1;
-      revealSubStepRef.current = next;
-      revealBySlideRef.current[idx] = next;
-      setRevealSubStep(next);
+      revealBySlideRef.current[idx] = sub - 1;
+      bumpReveal();
       return;
     }
 
-    revealBySlideRef.current[idx] = sub;
-    revealSubStepRef.current = 0;
-    setRevealSubStep(0);
     setNav((prev) => {
       const next = clampIndex(prev.index + delta);
       if (next === prev.index) return prev;
@@ -86,8 +66,6 @@ export default function Deck() {
   }, []);
 
   const go = useCallback((target: number) => {
-    revealSubStepRef.current = 0;
-    setRevealSubStep(0);
     setNav((prev) => {
       const next = clampIndex(target);
       if (next === prev.index) return prev;
@@ -98,8 +76,6 @@ export default function Deck() {
   useEffect(() => {
     const onHashChange = () => {
       const next = hashToIndex();
-      revealSubStepRef.current = 0;
-      setRevealSubStep(0);
       setNav((prev) => {
         if (next === prev.index) return prev;
         return { index: next, epoch: prev.epoch + 1 };
@@ -167,8 +143,6 @@ export default function Deck() {
         <SlidePlayContext.Provider value={playEpoch}>
           <SlideRevealProvider subStep={revealSubStep}>
             <div
-              key={index}
-              className="gv-slide-enter"
               style={{ position: "absolute", inset: 0, cursor: "pointer" }}
               onClick={() => step(1)}
               onContextMenu={(e) => {
@@ -176,10 +150,11 @@ export default function Deck() {
                 step(-1);
               }}
             >
-              <Current />
+              <div key={index} className="gv-slide-enter" style={{ position: "absolute", inset: 0 }}>
+                <Current />
+              </div>
+              <Chrome index={index} meta={meta} />
             </div>
-
-            <Chrome index={index} meta={meta} />
           </SlideRevealProvider>
         </SlidePlayContext.Provider>
       </StageScaler>
