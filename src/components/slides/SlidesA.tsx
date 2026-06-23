@@ -4,7 +4,7 @@ import SlideShell from "../SlideShell";
 import { Kicker, Title, Grad, Support, ImageSlot, Pill, GlassCard } from "../primitives";
 import { fadeUp, fadeIn, scaleIn } from "../motion";
 import { useSlidePlayKey } from "../slideContext";
-import { useRevealVisible } from "../slideReveal";
+import { RevealBlock, useRevealVisible } from "../slideReveal";
 import { colors, ease, font } from "../../theme";
 import logo from "../../assets/sasyas-logo-transparent.png";
 import fordModelT from "../../assets/ford-model-t.png";
@@ -312,19 +312,12 @@ export function Slide04() {
 
   return (
     <SlideShell>
-      {showTitle && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: ease.out }}
-          style={{ marginBottom: 56 }}
-        >
-          <Kicker>Dönem 1</Kicker>
-          <Title size={108} style={{ marginTop: 26 }}>
-            Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
-          </Title>
-        </motion.div>
-      )}
+      <RevealBlock step={1} style={{ marginBottom: 56 }}>
+        <Kicker>Dönem 1</Kicker>
+        <Title size={108} style={{ marginTop: 26 }}>
+          Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
+        </Title>
+      </RevealBlock>
 
       <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>
       <div style={{ marginTop: 50, maxWidth: 1600 }}>
@@ -393,19 +386,12 @@ export function Slide05() {
   ];
   return (
     <SlideShell>
-      {showTitle && (
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.9, ease: ease.out }}
-          style={{ marginBottom: 40 }}
-        >
-          <Kicker>Dönem 2</Kicker>
-          <Title size={104} style={{ marginTop: 24 }}>
-            Satabileceğimi <Grad>üretirim.</Grad>
-          </Title>
-        </motion.div>
-      )}
+      <RevealBlock step={1} style={{ marginBottom: 40 }}>
+        <Kicker>Dönem 2</Kicker>
+        <Title size={104} style={{ marginTop: 24 }}>
+          Satabileceğimi <Grad>üretirim.</Grad>
+        </Title>
+      </RevealBlock>
 
       <div style={{ position: "relative", marginTop: showTitle ? 0 : 24, height: 560 }}>
         <motion.div variants={scaleIn} style={{ position: "absolute", left: 470, right: 470, top: 0, bottom: 0 }}>
@@ -440,20 +426,17 @@ export function Slide05() {
 
 /* ============================= SLIDE 6 — FİNANSIN KURALI ==================== */
 export function Slide06() {
-  const showTitle = useRevealVisible(1);
   return (
     <SlideShell>
       <div style={{ display: "grid", gridTemplateColumns: "0.85fr 1.15fr", gap: 80, alignItems: "center", height: "100%" }}>
         <div>
           <Kicker>Dönem 3</Kicker>
-          {showTitle && (
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: ease.out }}>
-              <Title size={88} style={{ marginTop: 26 }}>
-                Finansın kuralına uyan <Grad>ürünü</Grad> üretirim.
-              </Title>
-              <Support style={{ marginTop: 34 }}>Arzı ve talebi buluşturan köprü artık finans kurumları.</Support>
-            </motion.div>
-          )}
+          <RevealBlock step={1}>
+            <Title size={88} style={{ marginTop: 26 }}>
+              Finansın kuralına uyan <Grad>ürünü</Grad> üretirim.
+            </Title>
+            <Support style={{ marginTop: 34 }}>Arzı ve talebi buluşturan köprü artık finans kurumları.</Support>
+          </RevealBlock>
           <motion.div variants={fadeUp} style={{ marginTop: 40 }}>
             <ImageSlot
               asset="asset: young-family-dreaming.jpg"

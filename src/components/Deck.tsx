@@ -3,13 +3,23 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import StageScaler from "./StageScaler";
 import { slideComponents } from "./slides";
 import { SlidePlayContext } from "./slideContext";
-import { SlideRevealProvider, revealMaxForIndex, revealProgressPct } from "./slideReveal";
+import { SlideRevealProvider, REVEAL_STEPS, revealMaxForIndex, revealProgressPct } from "./slideReveal";
 import slidesData from "../data/slides.json";
 import { colors, ease, font } from "../theme";
 
 type SlideMeta = (typeof slidesData)[number];
 
 const TOTAL = slideComponents.length;
+
+if (REVEAL_STEPS.length !== TOTAL) {
+  throw new Error(`REVEAL_STEPS (${REVEAL_STEPS.length}) must match slide count (${TOTAL})`);
+}
+
+/** slides.json includes id 7; the deck skips that slide — offset from deck index 6 onward. */
+function metaForDeckIndex(deckIndex: number): SlideMeta {
+  const jsonIndex = deckIndex < 6 ? deckIndex : deckIndex + 1;
+  return slidesData[jsonIndex] as SlideMeta;
+}
 
 type NavState = { index: number; epoch: number };
 
@@ -39,7 +49,6 @@ export default function Deck() {
   indexRef.current = index;
   revealBySlideRef.current = revealBySlide;
 
-  const revealSubStep = revealBySlide[index] ?? 0;
   const progressPct = revealProgressPct(index, TOTAL, revealBySlide);
 
   const step = useCallback((delta: number) => {
@@ -137,30 +146,29 @@ export default function Deck() {
   }, [step, go]);
 
   const Current = slideComponents[index];
-  const meta = slidesData[index] as SlideMeta;
+  const meta = metaForDeckIndex(index);
 
   return (
     <>
       <StageScaler>
         <SlidePlayContext.Provider value={playEpoch}>
-          <div style={{ position: "absolute", inset: 0 }}>
-            <div key={index} className="gv-slide-enter" style={{ position: "absolute", inset: 0, zIndex: 1 }}>
-              <SlideRevealProvider subStep={revealSubStep}>
+          <SlideRevealProvider slideIndex={index} revealBySlide={revealBySlide}>
+            <div style={{ position: "absolute", inset: 0 }}>
+              <div key={`${index}-${playEpoch}`} className="gv-slide-enter" style={{ position: "absolute", inset: 0, zIndex: 1 }}>
                 <Current />
-              </SlideRevealProvider>
+              </div>
+              <Chrome index={index} meta={meta} />
+              <div
+                aria-hidden
+                style={{ position: "absolute", inset: 0, zIndex: 20, cursor: "pointer" }}
+                onClick={() => step(1)}
+                onContextMenu={(e) => {
+                  e.preventDefault();
+                  step(-1);
+                }}
+              />
             </div>
-            <Chrome index={index} meta={meta} />
-            {/* Full-stage click target — sits above slide content so nothing blocks navigation */}
-            <div
-              aria-hidden
-              style={{ position: "absolute", inset: 0, zIndex: 20, cursor: "pointer" }}
-              onClick={() => step(1)}
-              onContextMenu={(e) => {
-                e.preventDefault();
-                step(-1);
-              }}
-            />
-          </div>
+          </SlideRevealProvider>
         </SlidePlayContext.Provider>
       </StageScaler>
 
