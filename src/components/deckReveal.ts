@@ -34,6 +34,7 @@ export const REVEAL_STEPS: readonly number[] = [
   0, // 27 Slide27
 ];
 
-export function revealMaxForIndex(index: number) {
+/** Fallback reveal counts when a slide component has no `revealMax` property. */
+export function revealStepsFallback(index: number) {
   return REVEAL_STEPS[index] ?? 0;
 }

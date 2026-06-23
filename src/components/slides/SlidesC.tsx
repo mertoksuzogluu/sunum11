@@ -321,6 +321,7 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
     </CssAnimRoot>
   );
 }
+Slide23b.revealMax = 1;
 
 /* ============================= SLIDE 24 — FİNANSAL ALFABE ================= */
 export function Slide24() {
@@ -438,6 +439,7 @@ export function Slide24() {
     </SlideShell>
   );
 }
+Slide24.revealMax = 0;
 
 /* ============================= SLIDE 24b — MORGAN STANLEY ANKETİ ======== */
 export function Slide24b() {

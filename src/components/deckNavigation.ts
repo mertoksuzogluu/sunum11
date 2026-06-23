@@ -1,6 +1,14 @@
-import { revealMaxForIndex } from "./deckReveal";
+import { revealStepsFallback } from "./deckReveal";
+import { slideComponents } from "./slides";
 
-export { revealMaxForIndex };
+type SlideWithReveal = (typeof slideComponents)[number] & { revealMax?: number };
+
+/** Component `revealMax` wins over the fallback array — prevents index drift. */
+export function revealMaxForIndex(index: number) {
+  const slide = slideComponents[index] as SlideWithReveal | undefined;
+  if (slide && typeof slide.revealMax === "number") return slide.revealMax;
+  return revealStepsFallback(index);
+}
 
 export type DeckState = {
   index: number;

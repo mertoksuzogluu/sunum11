@@ -1,8 +1,8 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { useRevealStep } from "./revealContext";
-import { REVEAL_STEPS, revealMaxForIndex } from "./deckReveal";
+import { REVEAL_STEPS } from "./deckReveal";
 
-export { REVEAL_STEPS, revealMaxForIndex };
+export { REVEAL_STEPS };
 
 /** Optional prop every slide may receive from Deck (prop wins over context). */
 export type SlideRevealProps = {

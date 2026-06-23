@@ -263,6 +263,7 @@ export function Slide02({ revealStep = 0 }: SlideRevealProps) {
     </SlideShell>
   );
 }
+Slide02.revealMax = 1;
 
 /* ============================= SLIDE 3 — ÜRETTİĞİMİ SATARIM ================= */
 export function Slide03() {
@@ -347,6 +348,7 @@ export function Slide04({ revealStep = 0 }: SlideRevealProps) {
     </SlideShell>
   );
 }
+Slide04.revealMax = 1;
 
 function useTypewriter(full: string, startDelay: number, cps: number, playKey: number) {
   const [n, setN] = useState(0);
@@ -423,6 +425,7 @@ export function Slide05({ revealStep = 0 }: SlideRevealProps) {
     </SlideShell>
   );
 }
+Slide05.revealMax = 1;
 
 /* ============================= SLIDE 6 — FİNANSIN KURALI ==================== */
 export function Slide06({ revealStep = 0 }: SlideRevealProps) {
@@ -505,6 +508,7 @@ export function Slide06({ revealStep = 0 }: SlideRevealProps) {
     </SlideShell>
   );
 }
+Slide06.revealMax = 1;
 
 /* ============================= SLIDE 7 — YENİ SORU ========================= */
 export function Slide07() {
