@@ -1,15 +1,16 @@
 import { motion } from "framer-motion";
 import type { CSSProperties, ReactNode } from "react";
+import { useRevealStep } from "./revealContext";
 import { ease } from "../theme";
 
-/** Optional prop every slide may receive from Deck. */
+/** Optional prop every slide may receive from Deck (context is the source of truth). */
 export type SlideRevealProps = {
   revealStep?: number;
 };
 
 /** Animated block shown after a reveal click on the current slide. */
 export function RevealBlock({
-  revealStep = 0,
+  revealStep: revealStepProp,
   requiredStep = 1,
   style,
   children,
@@ -19,6 +20,8 @@ export function RevealBlock({
   style?: CSSProperties;
   children: ReactNode;
 }) {
+  const revealStepFromContext = useRevealStep();
+  const revealStep = revealStepProp ?? revealStepFromContext;
   if (revealStep < requiredStep) return null;
   return (
     <motion.div
@@ -53,9 +56,29 @@ export function revealMaxForIndex(index: number) {
   return REVEAL_STEPS[index] ?? 0;
 }
 
-/** Simple 1-based slide position — (slide 4 of 29 ≈ 14%, never hits 100% until last slide). */
-export function revealProgressPct(slideIndex: number, totalSlides: number) {
+/** Total forward actions: slide changes + all reveal clicks across the deck. */
+export function totalForwardSteps(totalSlides: number) {
   if (totalSlides <= 0) return 0;
-  const safeIndex = Math.max(0, Math.min(slideIndex, totalSlides - 1));
-  return ((safeIndex + 1) / totalSlides) * 100;
+  const reveals = REVEAL_STEPS.reduce((sum, n) => sum + n, 0);
+  return totalSlides - 1 + reveals;
+}
+
+/** Completed forward actions up to and including the current slide position. */
+export function completedForwardSteps(slideIndex: number, reveals: Record<number, number>) {
+  let steps = slideIndex;
+  for (let i = 0; i <= slideIndex; i++) {
+    steps += reveals[i] ?? 0;
+  }
+  return steps;
+}
+
+export function revealProgressPct(
+  slideIndex: number,
+  totalSlides: number,
+  reveals: Record<number, number> = {},
+) {
+  const total = totalForwardSteps(totalSlides);
+  if (total <= 0) return 0;
+  const done = completedForwardSteps(slideIndex, reveals);
+  return Math.min(100, (done / total) * 100);
 }

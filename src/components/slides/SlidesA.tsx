@@ -5,6 +5,7 @@ import { Kicker, Title, Grad, Support, ImageSlot, Pill, GlassCard } from "../pri
 import { fadeUp, fadeIn, scaleIn } from "../motion";
 import { useSlidePlayKey } from "../slideContext";
 import { RevealBlock, type SlideRevealProps } from "../slideReveal";
+import { useRevealStep } from "../revealContext";
 import { colors, ease, font } from "../../theme";
 import logo from "../../assets/sasyas-logo-transparent.png";
 import fordModelT from "../../assets/ford-model-t.png";
@@ -202,7 +203,8 @@ function CityCore() {
 }
 
 /* ============================= SLIDE 2 — THE QUESTION ======================= */
-export function Slide02({ revealStep = 0 }: SlideRevealProps) {
+export function Slide02(_props: SlideRevealProps) {
+  const revealStep = useRevealStep();
   const showAnswer = revealStep >= 1;
   const options = ["Müteahhit mi?", "Yatırımcı mı?", "Banka mı?"];
   return (
@@ -303,7 +305,8 @@ export function Slide03() {
 }
 
 /* ============================= SLIDE 4 — FORD QUOTE ======================== */
-export function Slide04({ revealStep = 0 }: SlideRevealProps) {
+export function Slide04(_props: SlideRevealProps) {
+  const revealStep = useRevealStep();
   const full = "İstediğiniz rengi seçebilirsiniz…\nyeter ki siyah olsun.";
   const typed = useTypewriter(full, 0.9, 42);
   const showTitle = revealStep >= 1;
@@ -312,7 +315,7 @@ export function Slide04({ revealStep = 0 }: SlideRevealProps) {
 
   return (
     <SlideShell align="flex-start">
-      <RevealBlock revealStep={revealStep} style={{ marginBottom: 40 }}>
+      <RevealBlock style={{ marginBottom: 40 }}>
         <Kicker>Dönem 1</Kicker>
         <Title size={108} style={{ marginTop: 26 }}>
           Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
@@ -374,7 +377,8 @@ function useTypewriter(full: string, startDelay: number, cps: number) {
 }
 
 /* ============================= SLIDE 5 — SATABİLECEĞİMİ ÜRETİRİM =========== */
-export function Slide05({ revealStep = 0 }: SlideRevealProps) {
+export function Slide05(_props: SlideRevealProps) {
+  const revealStep = useRevealStep();
   const showTitle = revealStep >= 1;
   const bubbles: { label: string; side: "left" | "right"; top: number; order: number }[] = [
     { label: "Konum", side: "left", top: 20, order: 0 },
@@ -386,7 +390,7 @@ export function Slide05({ revealStep = 0 }: SlideRevealProps) {
   ];
   return (
     <SlideShell align="flex-start">
-      <RevealBlock revealStep={revealStep} style={{ marginBottom: 40 }}>
+      <RevealBlock style={{ marginBottom: 40 }}>
         <Kicker>Dönem 2</Kicker>
         <Title size={104} style={{ marginTop: 24 }}>
           Satabileceğimi <Grad>üretirim.</Grad>
@@ -425,13 +429,13 @@ export function Slide05({ revealStep = 0 }: SlideRevealProps) {
 }
 
 /* ============================= SLIDE 6 — FİNANSIN KURALI ==================== */
-export function Slide06({ revealStep = 0 }: SlideRevealProps) {
+export function Slide06(_props: SlideRevealProps) {
   return (
     <SlideShell align="flex-start">
       <div style={{ display: "grid", gridTemplateColumns: "0.85fr 1.15fr", gap: 80, alignItems: "center", height: "100%" }}>
         <div>
           <Kicker>Dönem 3</Kicker>
-          <RevealBlock revealStep={revealStep}>
+          <RevealBlock>
             <Title size={88} style={{ marginTop: 26 }}>
               Finansın kuralına uyan <Grad>ürünü</Grad> üretirim.
             </Title>
