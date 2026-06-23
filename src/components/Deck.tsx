@@ -33,6 +33,7 @@ export default function Deck() {
   const [notesOpen, setNotesOpen] = useState(false);
   const [revealSubStep, setRevealSubStep] = useState(0);
   const [revealMaxSteps, setRevealMaxSteps] = useState(0);
+  const [revealGateOpen, setRevealGateOpen] = useState(true);
 
   const setRevealSteps = useCallback((steps: number) => {
     setRevealMaxSteps(Math.max(0, steps));
@@ -40,9 +41,11 @@ export default function Deck() {
 
   useEffect(() => {
     setRevealSubStep(0);
+    setRevealGateOpen(true);
   }, [index, playEpoch]);
 
   const step = useCallback((delta: number) => {
+    if (delta > 0 && !revealGateOpen) return;
     if (delta > 0 && revealSubStep < revealMaxSteps) {
       setRevealSubStep((s) => s + 1);
       return;
@@ -58,11 +61,12 @@ export default function Deck() {
       if (next === prev.index) return prev;
       return { index: next, epoch: prev.epoch + 1 };
     });
-  }, [revealSubStep, revealMaxSteps]);
+  }, [revealSubStep, revealMaxSteps, revealGateOpen]);
 
   const go = useCallback((target: number) => {
     setRevealSubStep(0);
     setRevealMaxSteps(0);
+    setRevealGateOpen(true);
     setNav((prev) => {
       const next = clampIndex(target);
       if (next === prev.index) return prev;
@@ -75,6 +79,7 @@ export default function Deck() {
       const next = hashToIndex();
       setRevealSubStep(0);
       setRevealMaxSteps(0);
+      setRevealGateOpen(true);
       setNav((prev) => {
         if (next === prev.index) return prev;
         return { index: next, epoch: prev.epoch + 1 };
@@ -134,7 +139,12 @@ export default function Deck() {
     <>
       <StageScaler>
         <SlidePlayContext.Provider value={playEpoch}>
-          <SlideRevealProvider subStep={revealSubStep} setRevealSteps={setRevealSteps}>
+          <SlideRevealProvider
+            subStep={revealSubStep}
+            setRevealSteps={setRevealSteps}
+            gateOpen={revealGateOpen}
+            setGateOpen={setRevealGateOpen}
+          >
             <div
               key={playEpoch}
               className="gv-slide-enter"

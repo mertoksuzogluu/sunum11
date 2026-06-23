@@ -4,7 +4,7 @@ import SlideShell from "../SlideShell";
 import { Kicker, Title, Grad, Support, ImageSlot, Pill, GlassCard } from "../primitives";
 import { fadeUp, fadeIn, scaleIn } from "../motion";
 import { useSlidePlayKey } from "../slideContext";
-import { useRevealSteps, useRevealVisible } from "../slideReveal";
+import { useRevealSteps, useRevealVisible, useRevealGate } from "../slideReveal";
 import { colors, ease, font } from "../../theme";
 import logo from "../../assets/sasyas-logo-transparent.png";
 import fordModelT from "../../assets/ford-model-t.png";
@@ -305,57 +305,56 @@ export function Slide03() {
 
 /* ============================= SLIDE 4 — FORD QUOTE ======================== */
 export function Slide04() {
-  useRevealSteps(1);
-  const showTitle = useRevealVisible(1);
   const full = "İstediğiniz rengi seçebilirsiniz…\nyeter ki siyah olsun.";
   const text = useTypewriter(full, 0.9, 42);
   const quoteDone = text.length >= full.length;
 
+  useRevealSteps(1);
+  useRevealGate(quoteDone);
+  const showTitle = useRevealVisible(1);
+
   return (
     <SlideShell>
-      <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>
-      <div style={{ marginTop: 50, maxWidth: 1600 }}>
-        <span
-          style={{
-            fontFamily: font.heading,
-            fontWeight: 600,
-            fontSize: 92,
-            lineHeight: 1.15,
-            color: colors.iceWhite,
-            whiteSpace: "pre-line",
-          }}
-        >
-          “{text}
-          {!quoteDone && (
-            <motion.span
-              animate={{ opacity: [1, 0] }}
-              transition={{ duration: 0.6, repeat: Infinity }}
-              style={{ color: colors.greenNeon }}
+      {!showTitle ? (
+        <>
+          <Kicker color={colors.softGray}>1909 · Henry Ford</Kicker>
+          <div style={{ marginTop: 50, maxWidth: 1600 }}>
+            <span
+              style={{
+                fontFamily: font.heading,
+                fontWeight: 600,
+                fontSize: 92,
+                lineHeight: 1.15,
+                color: colors.iceWhite,
+                whiteSpace: "pre-line",
+              }}
             >
-              |
-            </motion.span>
-          )}
-          ”
-        </span>
-      </div>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 3.4, duration: 1 }}
-        style={{ marginTop: 56, fontFamily: font.body, fontSize: 30, color: colors.softGray, maxWidth: 1100 }}
-      >
-        Bu kibir değil — o günkü üretim şartlarının sonucu. Ne üretse satacağını biliyordu.
-      </motion.div>
-      {showTitle && (
+              “{text}
+              {!quoteDone && (
+                <motion.span
+                  animate={{ opacity: [1, 0] }}
+                  transition={{ duration: 0.6, repeat: Infinity }}
+                  style={{ color: colors.greenNeon }}
+                >
+                  |
+                </motion.span>
+              )}
+              ”
+            </span>
+          </div>
+        </>
+      ) : (
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, ease: ease.out }}
-          style={{ marginTop: 48 }}
+          style={{ display: "flex", flexDirection: "column", justifyContent: "center", height: "100%" }}
         >
-          <Title size={88}>
+          <Kicker>Dönem 1</Kicker>
+          <Title size={108} style={{ marginTop: 26 }}>
             Ürettiğimi <Grad from={colors.blueSoft} to="#fff">satarım.</Grad>
           </Title>
+          <Support style={{ marginTop: 36, fontSize: 40 }}>Talep yüksek, üretim sınırlıydı.</Support>
         </motion.div>
       )}
     </SlideShell>
