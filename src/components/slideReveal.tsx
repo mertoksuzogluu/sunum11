@@ -1,5 +1,8 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { useRevealStep } from "./revealContext";
+import { REVEAL_STEPS, revealMaxForIndex } from "./deckReveal";
+
+export { REVEAL_STEPS, revealMaxForIndex };
 
 /** Optional prop every slide may receive from Deck (prop wins over context). */
 export type SlideRevealProps = {
@@ -25,27 +28,6 @@ export function RevealBlock({
       {children}
     </div>
   );
-}
-
-/**
- * Extra forward clicks before leaving each deck index (0-based).
- * Must match slideComponents order in slides/index.tsx.
- */
-export const REVEAL_STEPS: readonly number[] = [
-  0, // 01
-  1, // 02 — son kullanıcı
-  0, // 03
-  1, // 04 — Ford / Ürettiğimi satarım
-  1, // 05 — Satabileceğimi üretirim
-  1, // 06 — Finansın kuralı
-  0, // 08 (07 skipped in deck)
-  0, // 09
-  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 10–18
-  0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, // 19–27 (index 23 = Slide23b reveal)
-];
-
-export function revealMaxForIndex(index: number) {
-  return REVEAL_STEPS[index] ?? 0;
 }
 
 /** Total forward actions: slide changes + all reveal clicks across the deck. */

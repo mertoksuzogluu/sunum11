@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import SlideShell from "../SlideShell";
 import StageBackground from "../StageBackground";
 import { CssAnimRoot } from "../cssAnimRestart";
-import { RevealBlock, type SlideRevealProps } from "../slideReveal";
+import { type SlideRevealProps } from "../slideReveal";
 import { Kicker, Title, Grad, Support, GlassCard, TrendArrow } from "../primitives";
 import { colors, ease, font, STAGE } from "../../theme";
 import { PaybackTimeline, KpiCard } from "../charts";
@@ -245,57 +245,52 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
         style={{
           position: "relative",
           height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: showBuilding ? "flex-start" : "center",
           padding: "72px 90px 84px",
-          gap: 28,
         }}
       >
-        <div className="gv-reveal" style={{ ["--gv-i" as string]: 0, textAlign: "center", flexShrink: 0 }}>
+        <div
+          className="gv-reveal"
+          style={{
+            ["--gv-i" as string]: 0,
+            textAlign: "center",
+            position: showBuilding ? "relative" : "absolute",
+            left: showBuilding ? undefined : 0,
+            right: showBuilding ? undefined : 0,
+            top: showBuilding ? undefined : "50%",
+            transform: showBuilding ? undefined : "translateY(-50%)",
+          }}
+        >
           <Title size={96}>
             Radikal bir yenileme kararı{" "}
             <Grad from={colors.blueSoft} to={colors.greenNeon}>alındı</Grad>
           </Title>
         </div>
 
-        <RevealBlock
-          revealStep={revealStep}
-          style={{
-            ["--gv-i" as string]: 1,
-            flex: 1,
-            width: "100%",
-            minHeight: 0,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 28,
-            textAlign: "center",
-          }}
-        >
-          <div style={{ flexShrink: 0 }}>
-            <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
-            <Title size={72} style={{ marginTop: 18 }}>
-              <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
-            </Title>
-          </div>
-
+        {showBuilding && (
           <div
+            className="gv-reveal"
             style={{
-              flex: 1,
-              width: "100%",
-              minHeight: 0,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              ["--gv-i" as string]: 1,
+              marginTop: 36,
+              display: "grid",
+              gridTemplateRows: "auto minmax(480px, 1fr)",
+              gap: 28,
+              height: "calc(100% - 120px)",
+              textAlign: "center",
             }}
           >
+            <div>
+              <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
+              <Title size={72} style={{ marginTop: 18 }}>
+                <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
+              </Title>
+            </div>
+
             <div
               style={{
                 width: "100%",
                 maxWidth: 1680,
-                height: "100%",
+                margin: "0 auto",
                 borderRadius: 24,
                 overflow: "hidden",
                 boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
@@ -304,6 +299,7 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
                 alignItems: "center",
                 justifyContent: "center",
                 padding: 12,
+                minHeight: 480,
               }}
             >
               <img
@@ -320,7 +316,7 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
               />
             </div>
           </div>
-        </RevealBlock>
+        )}
       </div>
     </CssAnimRoot>
   );

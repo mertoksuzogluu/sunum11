@@ -1,14 +1,12 @@
-import { REVEAL_STEPS } from "./slideReveal";
+import { revealMaxForIndex } from "./deckReveal";
+
+export { revealMaxForIndex };
 
 export type DeckState = {
   index: number;
   epoch: number;
   reveals: Record<number, number>;
 };
-
-export function revealMaxForIndex(index: number) {
-  return REVEAL_STEPS[index] ?? 0;
-}
 
 export function revealStepFor(state: DeckState) {
   return state.reveals[state.index] ?? 0;
