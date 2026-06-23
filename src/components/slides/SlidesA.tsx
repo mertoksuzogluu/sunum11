@@ -305,14 +305,11 @@ export function Slide03() {
 
 /* ============================= SLIDE 4 — FORD QUOTE ======================== */
 export function Slide04() {
+  useRevealSteps(1);
+  const showTitle = useRevealVisible(1);
   const full = "İstediğiniz rengi seçebilirsiniz…\nyeter ki siyah olsun.";
   const text = useTypewriter(full, 0.9, 42);
-  const [showTitle, setShowTitle] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setShowTitle(true), 30000);
-    return () => clearTimeout(t);
-  }, []);
+  const quoteDone = text.length >= full.length;
 
   return (
     <SlideShell>
@@ -329,13 +326,15 @@ export function Slide04() {
           }}
         >
           “{text}
-          <motion.span
-            animate={{ opacity: [1, 0] }}
-            transition={{ duration: 0.6, repeat: Infinity }}
-            style={{ color: colors.greenNeon }}
-          >
-            |
-          </motion.span>
+          {!quoteDone && (
+            <motion.span
+              animate={{ opacity: [1, 0] }}
+              transition={{ duration: 0.6, repeat: Infinity }}
+              style={{ color: colors.greenNeon }}
+            >
+              |
+            </motion.span>
+          )}
           ”
         </span>
       </div>
