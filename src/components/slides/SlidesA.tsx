@@ -48,9 +48,11 @@ export function Slide01() {
       </Title>
 
       <motion.div variants={fadeUp} style={{ marginTop: 30, maxWidth: 1120 }}>
-        <span style={{ fontFamily: font.heading, fontWeight: 500, fontSize: 46, color: colors.iceWhite, lineHeight: 1.18 }}>
-          Sürdürülebilirlik Gayrimenkulün yeni finansal göstergesi
-        </span>
+        <div style={{ fontFamily: font.heading, fontWeight: 500, fontSize: 46, color: colors.iceWhite, lineHeight: 1.18 }}>
+          Sürdürülebilirlik
+          <br />
+          Gayrimenkulün yeni finansal göstergesi
+        </div>
       </motion.div>
 
       <motion.div variants={fadeUp} style={{ marginTop: 70, display: "flex", alignItems: "center", gap: 22 }}>
