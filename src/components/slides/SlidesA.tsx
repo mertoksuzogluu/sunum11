@@ -691,14 +691,14 @@ export function Slide09() {
           ))}
         </div>
 
-        <div className="gv-scale-in" style={{ ["--gv-delay" as string]: "0.4s", height: "100%", minHeight: 620 }}>
+        <div className="gv-scale-in" style={{ ["--gv-delay" as string]: "0.4s", alignSelf: "stretch", display: "flex", alignItems: "center" }}>
           <ImageSlot
             asset="asset: netherlands-social-housing-retrofit.png"
             src={netherlandsSocialHousing}
             caption="Utrecht · prefabrik cephe yenilemesi ve güneş panelleri"
             tone="green"
+            aspectRatio="2090 / 970"
             objectPosition="center 45%"
-            style={{ height: "100%", minHeight: 620 }}
           />
         </div>
       </div>

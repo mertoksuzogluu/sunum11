@@ -319,6 +319,7 @@ export function ImageSlot({
   src,
   fit = "cover",
   objectPosition = "center center",
+  aspectRatio,
 }: {
   asset: string;
   caption?: string;
@@ -327,6 +328,8 @@ export function ImageSlot({
   style?: CSSProperties;
   fit?: "cover" | "contain";
   objectPosition?: string;
+  /** Match the photo’s native ratio so the frame has no letterboxing. */
+  aspectRatio?: string;
   /** Drop a real photo in /public/assets and pass e.g. src="/assets/ford.jpg".
    *  The dark overlay + label keep the deck cohesive once imagery is added. */
   src?: string;
@@ -337,6 +340,8 @@ export function ImageSlot({
     dark: "linear-gradient(150deg, #0a1830 0%, #050d1c 75%)",
     amber: "linear-gradient(150deg, #3a2a16 0%, #1a1208 75%)",
   };
+  const { height, minHeight, aspectRatio: styleAspect, ...restStyle } = style ?? {};
+  const ratio = aspectRatio ?? styleAspect;
   return (
     <div
       style={{
@@ -346,7 +351,10 @@ export function ImageSlot({
         background: toneBg[tone],
         border: "1px solid rgba(124,180,255,0.16)",
         boxShadow: "0 40px 90px -40px rgba(0,0,0,0.7)",
-        ...style,
+        ...(ratio
+          ? { width: "100%", aspectRatio: ratio, height: "auto" }
+          : { height, minHeight }),
+        ...restStyle,
       }}
     >
       {/* subtle texture */}
@@ -369,6 +377,7 @@ export function ImageSlot({
             height: "100%",
             objectFit: fit,
             objectPosition,
+            display: "block",
           }}
         />
       )}

@@ -45,8 +45,8 @@ export function Slide10() {
             src={netherlandsSocialHousing}
             caption="Utrecht · prefabrik cephe yenilemesi"
             tone="green"
+            aspectRatio="2090 / 970"
             objectPosition="center 45%"
-            style={{ height: 260 }}
           />
         </div>
       </div>
