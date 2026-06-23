@@ -386,8 +386,6 @@ function useTypewriter(full: string, startDelay: number, cps: number) {
 export function Slide05() {
   useRevealSteps(1);
   const showTitle = useRevealVisible(1);
-  // Three bubbles flank each side of the central image, vertically spaced.
-  // `side` keeps them clear of the headline and symmetric around the visual.
   const bubbles: { label: string; side: "left" | "right"; top: number; order: number }[] = [
     { label: "Konum", side: "left", top: 20, order: 0 },
     { label: "Kat", side: "left", top: 230, order: 2 },
@@ -398,16 +396,21 @@ export function Slide05() {
   ];
   return (
     <SlideShell>
-      <Kicker>Dönem 2</Kicker>
       {showTitle && (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, ease: ease.out }}>
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.9, ease: ease.out }}
+          style={{ marginBottom: 40 }}
+        >
+          <Kicker>Dönem 2</Kicker>
           <Title size={104} style={{ marginTop: 24 }}>
             Satabileceğimi <Grad>üretirim.</Grad>
           </Title>
         </motion.div>
       )}
 
-      <div style={{ position: "relative", marginTop: 64, height: 560 }}>
+      <div style={{ position: "relative", marginTop: showTitle ? 0 : 24, height: 560 }}>
         <motion.div variants={scaleIn} style={{ position: "absolute", left: 470, right: 470, top: 0, bottom: 0 }}>
           <ImageSlot
             asset="asset: parkroyal-pickering.jpg"
