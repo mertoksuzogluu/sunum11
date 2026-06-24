@@ -199,7 +199,7 @@
   },
   {
     "id": 23,
-    "title": "Sürdürülebilirlik, en kârlı yatırım.",
+    "title": "Enerji canavarından yeşil dönüşüme",
     "subtitle": "3 yılda kendini amorti etti.",
     "visualDirection": "KPI'lar + payback timeline: 6.514 cam, %96 yeniden kullanım, 13M$ yatırım, 4.4M$ yıllık tasarruf, 3 yıl amorti, %38 tasarruf.",
     "chartType": "payback-timeline",
@@ -208,11 +208,11 @@
   },
   {
     "id": 24,
-    "title": "Radikal bir yenileme kararı alındı",
-    "subtitle": "Empire State Building — gündüzden geceye ikonik yeşil dönüşüm.",
-    "visualDirection": "İlk görünüm: başlık; tıkla: bina adı + üçlü Empire State görseli (gündüz / gün batımı / gece).",
+    "title": "Empire State Building",
+    "subtitle": "Gündüzden geceye ikonik yeşil dönüşüm.",
+    "visualDirection": "Bina adı + üçlü Empire State görseli (gündüz / gün batımı / gece).",
     "chartType": "none",
-    "animationDirection": "Reveal: önce karar başlığı, sonra isim + triptych.",
+    "animationDirection": "Başlık ve triptych birlikte fade-in.",
     "speakerNotes": "Dünyanın en ikonik yapılarından biri: Empire State Building. Radikal yenileme kararıyla enerji canavarından yeşil değere dönüştü."
   },
   {

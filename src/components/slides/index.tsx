@@ -35,7 +35,7 @@ const deckEntries: DeckEntry[] = [
   { id: "21", component: Slide21, reveals: 0 },
   { id: "22", component: Slide22, reveals: 0 },
   { id: "23", component: Slide23, reveals: 0 },
-  { id: "23b", component: Slide23b, reveals: 1 },
+  { id: "23b", component: Slide23b, reveals: 0 },
   { id: "24", component: Slide24, reveals: 0 },
   { id: "24b", component: Slide24b, reveals: 0 },
   { id: "25", component: Slide25, reveals: 0 },
@@ -48,6 +48,6 @@ export const REVEAL_STEPS: readonly number[] = deckEntries.map((e) => e.reveals)
 
 const idx23b = deckEntries.findIndex((e) => e.id === "23b");
 const idx24 = deckEntries.findIndex((e) => e.id === "24");
-if (deckEntries[idx23b]?.reveals !== 1 || deckEntries[idx24]?.reveals !== 0) {
-  throw new Error("Slide23b must have 1 reveal; Slide24 must have 0");
+if (deckEntries[idx23b]?.reveals !== 0 || deckEntries[idx24]?.reveals !== 0) {
+  throw new Error("Slide23b and Slide24 must have 0 reveals");
 }

@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import SlideShell from "../SlideShell";
 import StageBackground from "../StageBackground";
 import { CssAnimRoot } from "../cssAnimRestart";
-import { type SlideRevealProps } from "../slideReveal";
 import { Kicker, Title, Grad, Support, GlassCard, TrendArrow } from "../primitives";
 import { colors, ease, font, STAGE } from "../../theme";
 import { PaybackTimeline, KpiCard } from "../charts";
@@ -212,7 +211,9 @@ export function Slide22() {
 export function Slide23() {
   return (
     <SlideShell pad={120}>
-      <Kicker>Yeşil dönüşüm</Kicker>
+      <Title size={88} style={{ marginTop: 0 }}>
+        Enerji canavarından <Grad>yeşil dönüşüme</Grad>
+      </Title>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 24, marginTop: 44 }}>
         <KpiCard value={6514} label="cam · sökülmeden 3 katmanlı" tone="white" delay={0.4} />
@@ -235,9 +236,7 @@ export function Slide23() {
 }
 
 /* ============================= SLIDE 23b — EMPIRE REVEAL ================== */
-export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
-  const showBuilding = revealStep >= 1;
-
+export function Slide23b() {
   return (
     <CssAnimRoot style={{ position: "absolute", inset: 0, width: STAGE.width, height: STAGE.height }}>
       <StageBackground variant="quiet" />
@@ -252,100 +251,72 @@ export function Slide23b({ revealStep = 0 }: SlideRevealProps) {
           justifyContent: "center",
         }}
       >
-        {!showBuilding ? (
+        <div
+          className="gv-reveal"
+          style={{
+            ["--gv-i" as string]: 0,
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 32,
+            textAlign: "center",
+          }}
+        >
           <div
-            className="gv-reveal"
             style={{
-              ["--gv-i" as string]: 0,
-              width: "100%",
-              textAlign: "center",
-            }}
-          >
-            <h1
-              style={{
-                fontFamily: font.heading,
-                fontWeight: 700,
-                fontSize: 96,
-                lineHeight: 1.12,
-                letterSpacing: "-0.025em",
-                color: colors.iceWhite,
-                margin: 0,
-              }}
-            >
-              <span style={{ display: "block" }}>Radikal bir yenileme</span>
-              <span style={{ display: "block" }}>
-                <Grad from={colors.blueSoft} to={colors.greenNeon}>kararı alındı</Grad>
-              </span>
-            </h1>
-          </div>
-        ) : (
-          <div
-            className="gv-reveal"
-            style={{
-              ["--gv-i" as string]: 1,
-              width: "100%",
-              height: "100%",
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              gap: 32,
-              textAlign: "center",
+              width: "100%",
             }}
           >
-            <div
+            <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
+            <h1
               style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
+                fontFamily: font.heading,
+                fontWeight: 700,
+                fontSize: 72,
+                lineHeight: 1.08,
+                letterSpacing: "-0.025em",
+                color: colors.iceWhite,
+                margin: "18px 0 0",
+                padding: 0,
                 width: "100%",
+                textAlign: "center",
               }}
             >
-              <Kicker color={colors.blueSoft}>New York · İkonik yapı</Kicker>
-              <h1
-                style={{
-                  fontFamily: font.heading,
-                  fontWeight: 700,
-                  fontSize: 72,
-                  lineHeight: 1.08,
-                  letterSpacing: "-0.025em",
-                  color: colors.iceWhite,
-                  margin: "18px 0 0",
-                  padding: 0,
-                  width: "100%",
-                  textAlign: "center",
-                }}
-              >
-                <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
-              </h1>
-            </div>
-
-            <div
-              style={{
-                width: "100%",
-                maxWidth: 760,
-                margin: "0 auto",
-                aspectRatio: "1080 / 1074",
-                flexShrink: 0,
-                borderRadius: 24,
-                overflow: "hidden",
-                boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
-              }}
-            >
-              <img
-                src={empireStateTriptych}
-                alt="Empire State Building — gündüz, gün batımı ve gece"
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "contain",
-                  display: "block",
-                }}
-              />
-            </div>
+              <Grad from={colors.blueSoft} to={colors.greenNeon}>Empire State Building</Grad>
+            </h1>
           </div>
-        )}
+
+          <div
+            style={{
+              width: "100%",
+              maxWidth: 760,
+              margin: "0 auto",
+              aspectRatio: "1080 / 1074",
+              flexShrink: 0,
+              borderRadius: 24,
+              overflow: "hidden",
+              boxShadow: "0 40px 120px -30px rgba(0,0,0,0.85)",
+            }}
+          >
+            <img
+              src={empireStateTriptych}
+              alt="Empire State Building — gündüz, gün batımı ve gece"
+              style={{
+                width: "100%",
+                height: "100%",
+                objectFit: "contain",
+                display: "block",
+              }}
+            />
+          </div>
+        </div>
       </div>
     </CssAnimRoot>
   );
